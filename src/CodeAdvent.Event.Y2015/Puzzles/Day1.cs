@@ -36,6 +36,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             for (int i = 0; i < input.Length; i++)
             {
                 floor += _input[i].Equals('(') ? 1 : -1;
+                
                 yield return (i+1, floor);
             }
         }
