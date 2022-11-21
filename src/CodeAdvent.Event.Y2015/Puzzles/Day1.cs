@@ -10,7 +10,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [SetUp]
         public async Task Setup()
         {
-            _input = await PuzzleInputCache.GetInput("https://adventofcode.com/2015/day/1/input");
+            _input = await CodeAdventData.GetData(2015, 1);
         }
 
         [Test]
