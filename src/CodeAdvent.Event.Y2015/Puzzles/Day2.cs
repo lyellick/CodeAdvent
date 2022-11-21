@@ -1,5 +1,3 @@
-using NuGet.Frameworks;
-
 namespace CodeAdvent.Event.Y2015.Puzzles
 {
     /// <summary>
