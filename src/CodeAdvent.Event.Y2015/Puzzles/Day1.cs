@@ -16,13 +16,28 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part1()
         {
-            Assert.Pass();
+            int floor = Levels(_input).Last().floor;
+
+            Assert.That(floor, Is.EqualTo(138));
         }
 
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            int position = Levels(_input).First(c => c.floor.Equals(-1)).position;
+
+            Assert.That(position, Is.EqualTo(1771));
+        }
+
+        private IEnumerable<(int position, int floor)> Levels(string input)
+        {
+            int floor = 0;
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                floor += _input[i].Equals('(') ? 1 : -1;
+                yield return (i+1, floor);
+            }
         }
     }
 }
