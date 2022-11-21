@@ -4,6 +4,14 @@ namespace CodeAdvent.Common
 {
     public static class CodeAdventData
     {
+        /// <summary>
+        /// Get the advent of code's input data based off the year and day. 
+        /// </summary>
+        /// <param name="year"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="UriFormatException"></exception>
         public static async Task<string> GetData(int year, int day)
         {
             if (!TryGetEnvironmentVariable("AOCSession", out string token))
