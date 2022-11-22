@@ -15,6 +15,8 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         {
             _input = await CodeAdventData.GetData(2015, 4);
             _input = _input.TrimEnd('\n');
+
+            Assert.That(_input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
