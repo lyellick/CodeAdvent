@@ -18,6 +18,8 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part1()
         {
+            var sizes = CalcListSize(_input);
+
             Assert.Pass();
         }
 
@@ -25,6 +27,21 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         public void Part2()
         {
             Assert.Pass();
+        }
+
+        private (int stringLiteralSize, int inMemorySize) CalcListSize(string input)
+        {
+            int stringLiteralSize = 0;
+            int inMemorySize = 0;
+
+            using var reader = new StringReader(input);
+
+            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+            {
+
+            }
+
+            return (stringLiteralSize, inMemorySize);
         }
     }
 }
