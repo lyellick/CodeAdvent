@@ -30,23 +30,24 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             Assert.Pass();
         }
 
-        private (string gate, bool solved, string wire, int? signal)[] ProcessInstructions(string input)
+        private (string gate, string wire, int? signal)[] ProcessInstructions(string input)
         {
             var circuits = MapInstructions(_input).ToArray();
 
             do
             {
-                var completed = circuits.Where(circuit => circuit.solved).ToArray();
-                
-                var remaining = circuits.Where(circuit => !circuit.solved).ToArray();
-
-                for (int i = 0; i < remaining.Length; i++)
+                for (int i = 0; i < circuits.Length; i++)
                 {
-                    foreach (var complete in completed)
-                        if (TrySafeReplace(remaining[i].gate, complete.wire, $"{complete.signal}", out string gate))
-                            remaining[i].gate = gate;
+                    foreach (var complete in circuits)
+                        if (TrySafeReplace(circuits[i].gate, complete.wire, complete.signal, out string gate))
+                        {
+                            circuits[i].gate = gate;
 
-                    string[] parts = remaining[i].gate.Split(' ');
+                            if (int.TryParse(gate, out int signal))
+                                circuits[i].signal = signal;
+                        }
+
+                    string[] parts = circuits[i].gate.Split(' ');
 
                     switch (parts.Length)
                     {
@@ -57,10 +58,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
                                 switch (operation)
                                 {
-                                    case "NOT":
-                                        remaining[i].signal = (ushort)~not;
-                                        remaining[i].solved = true;
-                                        break;
+                                    case "NOT": circuits[i].signal = (ushort)~not; break;
                                 }
                             }
                             break;
@@ -71,38 +69,24 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
                                 switch (operation)
                                 {
-                                    case "AND":
-                                        remaining[i].signal = left & right;
-                                        remaining[i].solved = true;
-                                        break;
-                                    case "OR":
-                                        remaining[i].signal = left | right;
-                                        remaining[i].solved = true;
-                                        break;
-                                    case "LSHIFT":
-                                        remaining[i].signal = left << right;
-                                        remaining[i].solved = true;
-                                        break;
-                                    case "RSHIFT":
-                                        remaining[i].signal = left >> right;
-                                        remaining[i].solved = true;
-                                        break;
+                                    case "AND": circuits[i].signal = left & right; break;
+                                    case "OR": circuits[i].signal = left | right; break;
+                                    case "LSHIFT": circuits[i].signal = left << right; break;
+                                    case "RSHIFT": circuits[i].signal = left >> right; break;
                                 }
-
-                                remaining[i].solved = true;
                             }
                             break;
                     }
                 }
 
-                circuits = completed.Concat(remaining).OrderBy(circuit => circuit.wire).ToArray();
+                circuits = circuits.OrderBy(circuit => circuit.wire).ToArray();
 
-            } while (!circuits.All(circuit => circuit.solved));
+            } while (!circuits.All(circuit => circuit.signal.HasValue));
 
             return circuits;
         }
 
-        private IEnumerable<(string gate, bool solved, string wire, int? signal)> MapInstructions(string input)
+        private IEnumerable<(string gate, string wire, int? signal)> MapInstructions(string input)
         {
             using var reader = new StringReader(input);
 
@@ -111,19 +95,22 @@ namespace CodeAdvent.Event.Y2015.Puzzles
                 string[] parts = line.Split(" -> ");
 
                 yield return int.TryParse(parts[0], out int signal)
-                    ? (parts[0], true, parts[1], signal)
-                    : (parts[0], false, parts[1], null);
+                    ? (parts[0], parts[1], signal)
+                    : (parts[0], parts[1], null);
             }
         }
 
-        private bool TrySafeReplace(string input, string find, string replace, out string output)
+        private bool TrySafeReplace(string input, string find, int? replace, out string output)
         {
-            Regex search = new($@"\b{find}\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
             output = null;
 
+            if (!replace.HasValue)
+                return false;
+
+            Regex search = new($@"\b{find}\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
             if (search.IsMatch(input))
-                output = search.Replace(input, replace);
+                output = search.Replace(input, $"{replace}");
 
             return search.IsMatch(input);
         }
