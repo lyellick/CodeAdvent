@@ -10,6 +10,8 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         public async Task Setup()
         {
             _input = await CodeAdventData.GetData(0, 0);
+
+            Assert.That(_input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
