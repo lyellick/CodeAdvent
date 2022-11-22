@@ -39,7 +39,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
                 for (int i = 0; i < circuits.Length; i++)
                 {
                     foreach (var complete in circuits)
-                        if (TrySafeReplace(circuits[i].gate, complete.wire, complete.signal, out string gate))
+                        if (TryWireMap(circuits[i].gate, complete.wire, complete.signal, out string gate))
                         {
                             circuits[i].gate = gate;
 
@@ -100,7 +100,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             }
         }
 
-        private bool TrySafeReplace(string input, string find, int? replace, out string output)
+        private bool TryWireMap(string input, string find, int? replace, out string output)
         {
             output = null;
 
