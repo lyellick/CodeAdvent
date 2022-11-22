@@ -27,7 +27,17 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            int signal = ProcessInstructions(_input).First(circut => circut.wire.Equals("a")).signal.Value;
+
+            Assert.That(signal, Is.EqualTo(3176));
+
+            Regex search = new($@".*(?=\b -> b\b).*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            _input = search.Replace(_input, $"{signal} -> b");
+
+            int newSignal = ProcessInstructions(_input).First(circut => circut.wire.Equals("a")).signal.Value;
+
+            Assert.That(signal, Is.EqualTo(14710));
         }
 
         private (string gate, string wire, int? signal)[] ProcessInstructions(string input)
@@ -52,29 +62,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
                     switch (parts.Length)
                     {
                         case 2:
-                            if (int.TryParse(parts[1], out int not))
-                            {
-                                string operation = parts[0];
+                            if (int.TryParse(parts[1], out int not) && parts[0].Equals("NOT"))
+                                circuits[i].signal = (ushort)~not;
 
-                                switch (operation)
-                                {
-                                    case "NOT": circuits[i].signal = (ushort)~not; break;
-                                }
-                            }
                             break;
                         case 3:
                             if (int.TryParse(parts[0], out int left) && int.TryParse(parts[2], out int right))
-                            {
-                                string operation = parts[1];
-
-                                switch (operation)
+                                switch (parts[1])
                                 {
                                     case "AND": circuits[i].signal = left & right; break;
                                     case "OR": circuits[i].signal = left | right; break;
                                     case "LSHIFT": circuits[i].signal = left << right; break;
                                     case "RSHIFT": circuits[i].signal = left >> right; break;
                                 }
-                            }
+
                             break;
                     }
                 }
