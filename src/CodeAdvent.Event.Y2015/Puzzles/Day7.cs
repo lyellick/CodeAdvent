@@ -37,7 +37,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
             int newSignal = ProcessInstructions(_input).First(circut => circut.wire.Equals("a")).signal.Value;
 
-            Assert.That(signal, Is.EqualTo(14710));
+            Assert.That(newSignal, Is.EqualTo(14710));
         }
 
         private (string gate, string wire, int? signal)[] ProcessInstructions(string input)
