@@ -2,6 +2,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 {
     /// <summary>
     /// </summary>
+    [Ignore("template unit test does not need to be ran")]
     public class Template
     {
         private string _input;
