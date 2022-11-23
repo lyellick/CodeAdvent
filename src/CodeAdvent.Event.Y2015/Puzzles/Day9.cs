@@ -1,3 +1,4 @@
+using System.Data;
 using System.Text.RegularExpressions;
 
 namespace CodeAdvent.Event.Y2015.Puzzles
@@ -20,27 +21,57 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part1()
         {
-            ProcessRoutes(_input);
+            var shortest = ProcessRoutes(_input).OrderBy(route => route.distance).First();
 
-            Assert.Pass();
+            Assert.That(shortest.distance, Is.EqualTo(251));
         }
 
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var longest = ProcessRoutes(_input).OrderByDescending(route => route.distance).First();
+
+            Assert.That(longest.distance, Is.EqualTo(898));
         }
 
-        private void ProcessRoutes(string input)
+        private (IList<string> permutation, IList<string[]> routes, int distance)[] ProcessRoutes(string input)
         {
-            var routes = MapRoutes(input);
+            var distances = MapDistances(input);
 
-            var locations = GetDistinctRoutes(routes);
+            var locations = GetDistinctLocations(distances);
 
-            var permutations = GeneratePermutations(locations);
+            var locationPermutations = GenerateLocationPermutations(locations);
+
+            var datsets = GenerateDataset(locationPermutations).ToArray();
+
+            for (int i = 0; i < datsets.Length; i++)
+            {
+                Parallel.ForEach(datsets[i].routes, route => 
+                {
+                    var found = distances.FirstOrDefault(distance => route.Contains(distance.start) && route.Contains(distance.end));
+
+                    datsets[i].distance += found.distance;
+                });
+            }
+
+            return datsets;
         }
 
-        private IEnumerable<(string start, string end, int distance)> MapRoutes(string input)
+        private IEnumerable<(IList<string> permutation, IList<string[]> routes, int distance)> GenerateDataset(IEnumerable<IList<string>> permutations)
+        {
+            foreach (var permutation in permutations)
+            {
+                List<string[]> routes = new();
+
+                for (int i = 0; i < permutation.Count; i++)
+                    if (i < permutation.Count - 1)
+                        routes.Add(new string[] { permutation[i], permutation[i + 1] });
+
+                yield return (permutation, routes, 0);
+            }
+        }
+
+        private IEnumerable<(string start, string end, int distance)> MapDistances(string input)
         {
             Regex parts = new(@"(.*)\sto\s(.*)\s=\s(.*)");
 
@@ -54,13 +85,13 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             }
         }
 
-        private string[] GetDistinctRoutes(IEnumerable<(string start, string end, int distance)> routes) => routes
+        private string[] GetDistinctLocations(IEnumerable<(string start, string end, int distance)> routes) => routes
                 .Select(route => new string[] { route.start, route.end })
                 .SelectMany(locations => locations)
                 .ToHashSet()
                 .ToArray();
 
-        private IEnumerable<IList<T>> GeneratePermutations<T>(IList<T> source)
+        private IEnumerable<IList<T>> GenerateLocationPermutations<T>(IList<T> source)
         {
             int length = source.Count;
 
