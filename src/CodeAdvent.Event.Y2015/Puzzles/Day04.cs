@@ -6,7 +6,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 4: The Ideal Stocking Stuffer
     /// </summary>
-    public class Day4
+    public class Day04
     {
         private string _input;
 

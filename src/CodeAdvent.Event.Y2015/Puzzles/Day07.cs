@@ -6,7 +6,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 7: Some Assembly Required
     /// </summary>
-    public class Day7
+    public class Day07
     {
         private string _input;
 

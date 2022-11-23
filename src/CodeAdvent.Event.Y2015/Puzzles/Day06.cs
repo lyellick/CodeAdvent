@@ -8,7 +8,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 6: Probably a Fire Hazard
     /// </summary>
-    public class Day6
+    public class Day06
     {
         private string _input;
 

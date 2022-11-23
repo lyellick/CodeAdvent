@@ -3,7 +3,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 2: I Was Told There Would Be No Math
     /// </summary>
-    public class Day2
+    public class Day02
     {
         private string _input;
 

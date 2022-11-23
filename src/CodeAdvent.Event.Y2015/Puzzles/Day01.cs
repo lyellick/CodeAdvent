@@ -3,7 +3,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 1: Not Quite Lisp
     /// </summary>
-    public class Day1
+    public class Day01
     {
         private string _input;
 

@@ -5,7 +5,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 5: Doesn't He Have Intern-Elves For This?
     /// </summary>
-    public class Day5   
+    public class Day05   
     {
         private string _input;
 

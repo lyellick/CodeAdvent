@@ -7,7 +7,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 3: Perfectly Spherical Houses in a Vacuum
     /// </summary>
-    public class Day3
+    public class Day03
     {
         private string _input;
 

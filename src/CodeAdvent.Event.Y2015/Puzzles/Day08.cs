@@ -6,7 +6,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 8: Matchsticks
     /// </summary>
-    public class Day8
+    public class Day08
     {
         private string _input;
 

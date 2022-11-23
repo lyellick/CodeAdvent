@@ -6,7 +6,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// <summary>
     /// Day 9: All in a Single Night
     /// </summary>
-    public class Day9
+    public class Day09
     {
         private string _input;
 
