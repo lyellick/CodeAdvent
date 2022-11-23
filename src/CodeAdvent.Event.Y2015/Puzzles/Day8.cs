@@ -21,32 +21,27 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part1()
         {
-            _input = @"""""
-""abc""
-""aaa\""aaa""
-""\x27""";
-
             var sizes = CalcListSize(_input);
 
             int size = sizes.stringLiteralSize - sizes.inMemorySize;
 
-            Assert.Pass();
+            Assert.That(size, Is.EqualTo(1333));
         }
 
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var sizes = CalcListSize(_input, true);
+
+            int size = sizes.inMemorySize - sizes.stringLiteralSize;
+
+            Assert.That(size, Is.EqualTo(2046));
         }
 
-        private (int stringLiteralSize, int inMemorySize) CalcListSize(string input)
+        private (int stringLiteralSize, int inMemorySize) CalcListSize(string input, bool isPart2 = false)
         {
             List<int> stringLiteralSize = new();
             List<int> inMemorySize = new();
-
-            Regex hex = new(@"\\x\w{2}");
-            Regex backslash = new(@"\\\\");
-            Regex doublequotes = new(@"\\""");
 
             using var reader = new StringReader(input);
 
@@ -54,18 +49,9 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             {
                 int stringSize = line.Length;
 
-                var foundHex = hex.Matches(line);
-                var foundBackslashes = backslash.Matches(line);
-                var foundDoublequotes = doublequotes.Matches(line);
-
-                line = hex.Replace(line, "");
-                line = backslash.Replace(line, "");
-                line = doublequotes.Replace(line, "");
-
-                line = line.Remove(0, 1);
-                line = line.Remove(line.Length - 1, 1);
-
-                int memorySize = line.Length + foundHex.Count + foundBackslashes.Count + foundDoublequotes.Count;
+                int memorySize = !isPart2 
+                    ? Regex.Unescape(line[1..^1]).Length 
+                    : $"\"{line.Replace("\\", "\\\\").Replace("\"", "\\\"")}\"".Length;
 
                 stringLiteralSize.Add(stringSize);
                 inMemorySize.Add(memorySize);
