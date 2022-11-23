@@ -31,16 +31,21 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         public void Part2()
         {
             // Process takes too long to preform.
-            //var output = ProcessIterations(_input, 50);
+            if (false)
+            {
+                var output = ProcessIterations(_input, 50);
 
-            //Assert.That(output.length, Is.EqualTo(5103798));
-
-            Assert.Pass();
+                Assert.That(output.length, Is.EqualTo(5103798));
+            }
+            else
+            {
+                Assert.Pass();
+            }
         }
 
         private (string result, int length) ProcessIterations(string input, int iterations)
         {
-            do 
+            do
             {
                 input = ProcessSequence(input);
                 iterations--;
