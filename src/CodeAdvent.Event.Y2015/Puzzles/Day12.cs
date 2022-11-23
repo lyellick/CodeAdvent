@@ -32,6 +32,11 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
+            Regex integers = new(@"-?\d+");
+            Regex curlyBraces = new(@"\{([^}]+)\}");
+
+
+
             Assert.Pass();
         }
     }
