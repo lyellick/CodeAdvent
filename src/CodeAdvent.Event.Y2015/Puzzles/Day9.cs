@@ -42,19 +42,19 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
             var locationPermutations = GenerateLocationPermutations(locations);
 
-            var datsets = GenerateDataset(locationPermutations).ToArray();
+            var datasets = GenerateDataset(locationPermutations).ToArray();
 
-            for (int i = 0; i < datsets.Length; i++)
+            Parallel.For(0, datasets.Length, i =>
             {
-                Parallel.ForEach(datsets[i].routes, route => 
+                Parallel.ForEach(datasets[i].routes, route =>
                 {
                     var found = distances.FirstOrDefault(distance => route.Contains(distance.start) && route.Contains(distance.end));
 
-                    datsets[i].distance += found.distance;
+                    datasets[i].distance += found.distance;
                 });
-            }
+            });
 
-            return datsets;
+            return datasets;
         }
 
         private IEnumerable<(IList<string> permutation, IList<string[]> routes, int distance)> GenerateDataset(IEnumerable<IList<string>> permutations)
