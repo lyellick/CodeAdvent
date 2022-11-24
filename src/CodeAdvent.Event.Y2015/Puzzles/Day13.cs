@@ -1,3 +1,4 @@
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.DataCollection;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -21,7 +22,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part1()
         {
-            var plan = ProcessOptimalSeatingArrangement(_input);
+            _input = @"Alice would gain 54 happiness units by sitting next to Bob.
+Alice would lose 79 happiness units by sitting next to Carol.
+Alice would lose 2 happiness units by sitting next to David.
+Bob would gain 83 happiness units by sitting next to Alice.
+Bob would lose 7 happiness units by sitting next to Carol.
+Bob would lose 63 happiness units by sitting next to David.
+Carol would lose 62 happiness units by sitting next to Alice.
+Carol would gain 60 happiness units by sitting next to Bob.
+Carol would gain 55 happiness units by sitting next to David.
+David would gain 46 happiness units by sitting next to Alice.
+David would lose 7 happiness units by sitting next to Bob.
+David would gain 41 happiness units by sitting next to Carol.";
+
+            var plan = ProcessOptimalSeatingArrangement(_input).OrderByDescending(arrangement => arrangement.units);
 
             Assert.Pass();
         }
@@ -32,7 +46,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             Assert.Pass();
         }
 
-        private object ProcessOptimalSeatingArrangement(string input)
+        private (IList<string> permutation, IList<string[]> splits, int units)[] ProcessOptimalSeatingArrangement(string input)
         {
             var requests = MapIdealNeighbors(input);
 
@@ -40,9 +54,24 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
             var guestPermutations = guests.GeneratePermutations();
 
-            var datasets = GenerateDatasets(guestPermutations);
+            var datasets = GenerateDatasets(guestPermutations).ToArray();
 
-            return new { };
+            Parallel.For(0, datasets.Length, i => 
+            {
+                Parallel.ForEach(datasets[i].splits, split => 
+                {
+                    var found = requests.FirstOrDefault(request => split[0].Contains(request.guest) && split[1].Contains(request.neighbor));
+
+                    switch (found.outcome)
+                    {
+                        case Outcome.Gain: datasets[i].units += found.units; break;
+                        case Outcome.Lose: datasets[i].units -= found.units; break;
+                        case Outcome.None: default: break;
+                    }
+                });
+            });
+
+            return datasets;
         }
 
         private IEnumerable<(IList<string> permutation, IList<string[]> splits, int units)> GenerateDatasets(IEnumerable<IList<string>> permutations)
