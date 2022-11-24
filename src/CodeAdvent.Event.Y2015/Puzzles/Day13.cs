@@ -32,7 +32,28 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            _input += "Alice would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nBob would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nCarol would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nDavid would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nEric would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nFrank would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nGeorge would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nMallory would none 0 happiness units by sitting next to Lincoln.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to Alice.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to Bob.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to Carol.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to David.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to Eric.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to Frank.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to George.";
+            _input += "\nLincoln would none 0 happiness units by sitting next to Mallory.";
+
+            var plan = ProcessOptimalSeatingArrangement(_input).OrderByDescending(arrangement => arrangement.units.Sum());
+
+            int sum = plan.First().units.Sum();
+
+            Assert.That(sum, Is.EqualTo(640));
         }
 
         private (IList<string> permutation, IList<string[]> splits, int[] units)[] ProcessOptimalSeatingArrangement(string input)
@@ -45,11 +66,11 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
             var datasets = GenerateDatasets(guestPermutations).ToArray();
 
-            for (int i = 0; i < datasets.Length; i++)
+            Parallel.For(0, datasets.Length, i =>
             {
                 List<int> round = new();
 
-                foreach (var split in datasets[i].splits)
+                Parallel.ForEach(datasets[i].splits, split => 
                 {
                     var left = requests.FirstOrDefault(request => split[0].Contains(request.guest) && split[1].Contains(request.neighbor));
                     var right = requests.FirstOrDefault(request => split[1].Contains(request.guest) && split[0].Contains(request.neighbor));
@@ -58,19 +79,19 @@ namespace CodeAdvent.Event.Y2015.Puzzles
                     {
                         case Outcome.Gain: round.Add(left.units); break;
                         case Outcome.Lose: round.Add(left.units * -1); break;
-                        case Outcome.None: default: break;
+                        case Outcome.None: default: round.Add(0); break;
                     }
 
                     switch (right.outcome)
                     {
                         case Outcome.Gain: round.Add(right.units); break;
                         case Outcome.Lose: round.Add(right.units * -1); break;
-                        case Outcome.None: default: break;
+                        case Outcome.None: default: round.Add(0); break;
                     }
-                }
+                });
 
                 datasets[i].units = round.ToArray();
-            }
+            });
 
             return datasets;
         }
