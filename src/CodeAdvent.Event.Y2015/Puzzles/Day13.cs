@@ -22,22 +22,11 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part1()
         {
-            _input = @"Alice would gain 54 happiness units by sitting next to Bob.
-Alice would lose 79 happiness units by sitting next to Carol.
-Alice would lose 2 happiness units by sitting next to David.
-Bob would gain 83 happiness units by sitting next to Alice.
-Bob would lose 7 happiness units by sitting next to Carol.
-Bob would lose 63 happiness units by sitting next to David.
-Carol would lose 62 happiness units by sitting next to Alice.
-Carol would gain 60 happiness units by sitting next to Bob.
-Carol would gain 55 happiness units by sitting next to David.
-David would gain 46 happiness units by sitting next to Alice.
-David would lose 7 happiness units by sitting next to Bob.
-David would gain 41 happiness units by sitting next to Carol.";
+            var plan = ProcessOptimalSeatingArrangement(_input).OrderByDescending(arrangement => arrangement.units.Sum());
 
-            var plan = ProcessOptimalSeatingArrangement(_input).OrderByDescending(arrangement => arrangement.units);
+            int sum = plan.First().units.Sum();
 
-            Assert.Pass();
+            Assert.That(sum, Is.EqualTo(664));
         }
 
         [Test]
@@ -46,7 +35,7 @@ David would gain 41 happiness units by sitting next to Carol.";
             Assert.Pass();
         }
 
-        private (IList<string> permutation, IList<string[]> splits, int units)[] ProcessOptimalSeatingArrangement(string input)
+        private (IList<string> permutation, IList<string[]> splits, int[] units)[] ProcessOptimalSeatingArrangement(string input)
         {
             var requests = MapIdealNeighbors(input);
 
@@ -56,25 +45,37 @@ David would gain 41 happiness units by sitting next to Carol.";
 
             var datasets = GenerateDatasets(guestPermutations).ToArray();
 
-            Parallel.For(0, datasets.Length, i => 
+            for (int i = 0; i < datasets.Length; i++)
             {
-                Parallel.ForEach(datasets[i].splits, split => 
-                {
-                    var found = requests.FirstOrDefault(request => split[0].Contains(request.guest) && split[1].Contains(request.neighbor));
+                List<int> round = new();
 
-                    switch (found.outcome)
+                foreach (var split in datasets[i].splits)
+                {
+                    var left = requests.FirstOrDefault(request => split[0].Contains(request.guest) && split[1].Contains(request.neighbor));
+                    var right = requests.FirstOrDefault(request => split[1].Contains(request.guest) && split[0].Contains(request.neighbor));
+
+                    switch (left.outcome)
                     {
-                        case Outcome.Gain: datasets[i].units += found.units; break;
-                        case Outcome.Lose: datasets[i].units -= found.units; break;
+                        case Outcome.Gain: round.Add(left.units); break;
+                        case Outcome.Lose: round.Add(left.units * -1); break;
                         case Outcome.None: default: break;
                     }
-                });
-            });
+
+                    switch (right.outcome)
+                    {
+                        case Outcome.Gain: round.Add(right.units); break;
+                        case Outcome.Lose: round.Add(right.units * -1); break;
+                        case Outcome.None: default: break;
+                    }
+                }
+
+                datasets[i].units = round.ToArray();
+            }
 
             return datasets;
         }
 
-        private IEnumerable<(IList<string> permutation, IList<string[]> splits, int units)> GenerateDatasets(IEnumerable<IList<string>> permutations)
+        private IEnumerable<(IList<string> permutation, IList<string[]> splits, int[] units)> GenerateDatasets(IEnumerable<IList<string>> permutations)
         {
             foreach (var permutation in permutations)
             {
@@ -87,7 +88,7 @@ David would gain 41 happiness units by sitting next to Carol.";
                 // Catch the loop around so the last guest can be matched up with the first guest in the permuation.
                 splits.Add(new string[] { permutation[^1], permutation[0] });
 
-                yield return (permutation, splits, 0);
+                yield return (permutation, splits, Array.Empty<int>());
             }
         }
 
