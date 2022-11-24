@@ -4,8 +4,8 @@ Public repository for the yearly Advent of Code challenges in C#.
 `DateTime.Now.Year` is never pushed till the event is completed.
 ```
        _____________,--,
-      | | | | | | |/ .-.\   HANG IN THERE
-      |_|_|_|_|_|_/ /   `.      SANTA
+      | | | | | | |/ .-.\   That's not the
+      |_|_|_|_|_|_/ /   `.      right answer santa!
        |_|__|__|_; |      \
        |___|__|_/| |     .'`}
        |_|__|__/ | |   .'.'`\
