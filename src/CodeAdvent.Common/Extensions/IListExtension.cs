@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeAdvent.Common.Extensions
+﻿namespace CodeAdvent.Common.Extensions
 {
     public static class IListExtension
     {
+        /// <summary>
+        /// Generate all permutations of a given list.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static IEnumerable<IList<T>> GeneratePermutations<T>(this IList<T> source)
         {
             int length = source.Count;
