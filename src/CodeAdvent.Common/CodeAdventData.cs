@@ -20,7 +20,7 @@ namespace CodeAdvent.Common
             if (!Uri.TryCreate($@"https://adventofcode.com/{year}/day/{day}/input", UriKind.RelativeOrAbsolute, out Uri uri))
                 throw new UriFormatException();
 
-            string cache = Path.Join(Path.GetTempPath(), $"CodeAdvent{year}{day:00}.txt");
+            string cache = Path.Join(Path.GetTempPath(), $"AOC{year}{day:00}.txt");
 
             if (!File.Exists(cache))
             {
