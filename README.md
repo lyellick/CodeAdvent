@@ -30,3 +30,4 @@ Public repository for the yearly Advent of Code challenges in C#.
      |     |     |     |     |     |     |     |
 '---' '---' '---' '---' '---' '---' '---' '---'
 ```
+<sup>*Source: [Art by Joan Stark](https://www.asciiart.eu/holiday-and-events/christmas/santa-claus)*</sup>
