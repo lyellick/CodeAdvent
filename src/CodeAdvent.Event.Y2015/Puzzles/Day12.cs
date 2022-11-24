@@ -1,4 +1,4 @@
-using System.Text.RegularExpressions;
+using System.Text.Json;
 
 namespace CodeAdvent.Event.Y2015.Puzzles
 {
@@ -20,11 +20,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part1()
         {
-            Regex integers = new(@"-?\d+");
-
-            var matches = integers.Matches(_input);
-
-            int sum = matches.Sum(match => int.Parse(match.Value));
+            int sum = ProcessJson(_input);
 
             Assert.That(sum, Is.EqualTo(191164));
         }
@@ -32,12 +28,26 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            Regex integers = new(@"-?\d+");
-            Regex curlyBraces = new(@"\{([^}]+)\}");
+            int sum = ProcessJson(_input, "red");
 
+            Assert.That(sum, Is.EqualTo(87842));
+        }
 
+        private int ProcessJson(string input, string exclude = "")
+        {
+            int walkJson(JsonElement t)
+            {
+                return t.ValueKind switch
+                {
+                    JsonValueKind.Object when !string.IsNullOrEmpty(exclude) && t.EnumerateObject().Any(p => p.Value.ValueKind == JsonValueKind.String && p.Value.GetString() == exclude) => 0,
+                    JsonValueKind.Object => t.EnumerateObject().Select(p => walkJson(p.Value)).Sum(),
+                    JsonValueKind.Array => t.EnumerateArray().Select(walkJson).Sum(),
+                    JsonValueKind.Number => t.GetInt32(),
+                    _ => 0
+                };
+            }
 
-            Assert.Pass();
+            return walkJson(JsonDocument.Parse(input).RootElement);
         }
     }
 }
