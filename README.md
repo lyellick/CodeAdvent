@@ -1,2 +1,2 @@
-# 🎄 CodeAdvent: Advent of Code (2015-2021) in C#
-Private repository for the yearly Advent of Code challenges.
+# 🎄 Advent of Code 🎄
+Private repository for the yearly Advent of Code challenges in C#.
