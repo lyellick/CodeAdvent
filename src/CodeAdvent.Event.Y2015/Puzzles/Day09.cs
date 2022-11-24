@@ -40,7 +40,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
             var locations = GetDistinctLocations(distances);
 
-            var locationPermutations = GenerateLocationPermutations(locations);
+            var locationPermutations = locations.GeneratePermutations();
 
             var datasets = GenerateDataset(locationPermutations).ToArray();
 
@@ -90,45 +90,5 @@ namespace CodeAdvent.Event.Y2015.Puzzles
                 .SelectMany(locations => locations)
                 .ToHashSet()
                 .ToArray();
-
-        private IEnumerable<IList<T>> GenerateLocationPermutations<T>(IList<T> source)
-        {
-            int length = source.Count;
-
-            var startIndices = new int[length];
-            var variationElements = new HashSet<T>();
-
-            while (startIndices[0] < source.Count)
-            {
-                var variation = new List<T>(length);
-                var valid = true;
-                for (int i = 0; i < length; ++i)
-                {
-                    var element = source[startIndices[i]];
-                    if (variationElements.Contains(element))
-                    {
-                        valid = false;
-                        break;
-                    }
-                    variation.Add(element);
-                    variationElements.Add(element);
-                }
-                if (valid)
-                    yield return variation;
-
-                startIndices[length - 1]++;
-                for (int i = length - 1; i > 0; --i)
-                {
-                    if (startIndices[i] >= source.Count)
-                    {
-                        startIndices[i] = 0;
-                        startIndices[i - 1]++;
-                    }
-                    else
-                        break;
-                }
-                variationElements.Clear();
-            }
-        }
     }
 }
