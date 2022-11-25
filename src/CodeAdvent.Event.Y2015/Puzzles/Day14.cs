@@ -42,10 +42,26 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
             seconds = 1000;
 
-            for (int i = 0; i < reindeer.Length; i++)
+            int second = 0;
+
+            do
             {
-                // TODO: Magic calculations...
-            }
+                second++;
+
+                for (int i = 0; i < reindeer.Length; i++)
+                {
+                    if (reindeer[i].fly)
+                    {
+                        reindeer[i].distance += reindeer[i].speed;
+
+                        reindeer[i].fly = second % reindeer[i].duration != 0;
+                    }
+                    else
+                    {
+                        reindeer[i].fly = second % reindeer[i].rest == 0;
+                    }
+                }
+            } while (second != seconds);
 
             return reindeer;
         }
