@@ -8,21 +8,21 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day10
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 10);
-            _input = _input.TrimEnd('\n');
+            _event = await CodeAdventData.GetEvent(2015, 10);
+            _event.Input = _event.Input.TrimEnd('\n');
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var output = ProcessIterations(_input, 40);
+            var output = ProcessIterations(_event.Input, 40);
 
             Assert.That(output.length, Is.EqualTo(360154));
         }
@@ -33,7 +33,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             // Process takes too long to preform.
             if (false)
             {
-                var output = ProcessIterations(_input, 50);
+                var output = ProcessIterations(_event.Input, 50);
 
                 Assert.That(output.length, Is.EqualTo(5103798));
             }

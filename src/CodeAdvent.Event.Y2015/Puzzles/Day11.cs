@@ -7,21 +7,21 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day11
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 11);
-            _input = _input.TrimEnd('\n');
+            _event = await CodeAdventData.GetEvent(2015, 11);
+            _event.Input = _event.Input.TrimEnd('\n');
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            string password = ProcessNextPassword(_input);
+            string password = ProcessNextPassword(_event.Input);
 
             Assert.That(password, Is.EqualTo("hxbxxyzz"));
         }
@@ -29,7 +29,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            string password = ProcessNextPassword(_input);
+            string password = ProcessNextPassword(_event.Input);
 
             password = ProcessNextPassword(password);
 

@@ -8,20 +8,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day09
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 9);
+            _event = await CodeAdventData.GetEvent(2015, 9);
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var shortest = ProcessRoutes(_input).OrderBy(route => route.distance).First();
+            var shortest = ProcessRoutes(_event.Input).OrderBy(route => route.distance).First();
 
             Assert.That(shortest.distance, Is.EqualTo(251));
         }
@@ -29,7 +29,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            var longest = ProcessRoutes(_input).OrderByDescending(route => route.distance).First();
+            var longest = ProcessRoutes(_event.Input).OrderByDescending(route => route.distance).First();
 
             Assert.That(longest.distance, Is.EqualTo(898));
         }

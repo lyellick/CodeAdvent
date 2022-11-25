@@ -9,20 +9,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day13
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 13);
+            _event = await CodeAdventData.GetEvent(2015, 13);
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var plan = ProcessOptimalSeatingArrangement(_input).OrderByDescending(arrangement => arrangement.units.Sum());
+            var plan = ProcessOptimalSeatingArrangement(_event.Input).OrderByDescending(arrangement => arrangement.units.Sum());
 
             int sum = plan.First().units.Sum();
 
@@ -32,24 +32,24 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            _input += "Alice would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nBob would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nCarol would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nDavid would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nEric would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nFrank would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nGeorge would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nMallory would none 0 happiness units by sitting next to Lincoln.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to Alice.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to Bob.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to Carol.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to David.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to Eric.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to Frank.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to George.";
-            _input += "\nLincoln would none 0 happiness units by sitting next to Mallory.";
+            _event.Input += "Alice would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nBob would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nCarol would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nDavid would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nEric would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nFrank would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nGeorge would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nMallory would none 0 happiness units by sitting next to Lincoln.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Alice.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Bob.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Carol.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to David.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Eric.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Frank.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to George.";
+            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Mallory.";
 
-            var plan = ProcessOptimalSeatingArrangement(_input).OrderByDescending(arrangement => arrangement.units.Sum());
+            var plan = ProcessOptimalSeatingArrangement(_event.Input).OrderByDescending(arrangement => arrangement.units.Sum());
 
             int sum = plan.First().units.Sum();
 

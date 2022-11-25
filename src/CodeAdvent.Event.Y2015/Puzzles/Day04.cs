@@ -8,21 +8,21 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day04
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 4);
-            _input = _input.TrimEnd('\n');
+            _event = await CodeAdventData.GetEvent(2015, 4);
+            _event.Input = _event.Input.TrimEnd('\n');
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var result = Mine(_input, "00000");
+            var result = Mine(_event.Input, "00000");
 
             Assert.That(result.secret, Is.EqualTo(282749));
         }
@@ -30,7 +30,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            var result = Mine(_input, "000000");
+            var result = Mine(_event.Input, "000000");
 
             Assert.That(result.secret, Is.EqualTo(9962624));
         }

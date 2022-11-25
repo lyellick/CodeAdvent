@@ -5,20 +5,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day14
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 14);
+            _event = await CodeAdventData.GetEvent(2015, 14);
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var results = ProcessReindeerSimulation(_input, 2503).OrderByDescending(simulation => simulation.distance);
+            var results = ProcessReindeerSimulation(_event.Input, 2503).OrderByDescending(simulation => simulation.distance);
 
             double distance = results.First().distance;
 

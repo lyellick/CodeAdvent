@@ -8,20 +8,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day07
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 7);
+            _event = await CodeAdventData.GetEvent(2015, 7);
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            int signal = ProcessInstructions(_input).First(circut => circut.wire.Equals("a")).signal.Value;
+            int signal = ProcessInstructions(_event.Input).First(circut => circut.wire.Equals("a")).signal.Value;
 
             Assert.That(signal, Is.EqualTo(3176));
         }
@@ -29,22 +29,22 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            int signal = ProcessInstructions(_input).First(circut => circut.wire.Equals("a")).signal.Value;
+            int signal = ProcessInstructions(_event.Input).First(circut => circut.wire.Equals("a")).signal.Value;
 
             Assert.That(signal, Is.EqualTo(3176));
 
             Regex search = new($@".*(?=\b -> b\b).*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            _input = search.Replace(_input, $"{signal} -> b");
+            _event.Input = search.Replace(_event.Input, $"{signal} -> b");
 
-            int newSignal = ProcessInstructions(_input).First(circut => circut.wire.Equals("a")).signal.Value;
+            int newSignal = ProcessInstructions(_event.Input).First(circut => circut.wire.Equals("a")).signal.Value;
 
             Assert.That(newSignal, Is.EqualTo(14710));
         }
 
         private (string gate, string wire, int? signal)[] ProcessInstructions(string input)
         {
-            var circuits = MapInstructions(_input).ToArray();
+            var circuits = MapInstructions(_event.Input).ToArray();
 
             do
             {

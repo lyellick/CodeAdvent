@@ -5,14 +5,14 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     [Ignore("template unit test does not need to be ran")]
     public class Template
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(0, 0);
+            _event = await CodeAdventData.GetEvent(0, 0);
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]

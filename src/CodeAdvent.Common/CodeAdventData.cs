@@ -1,4 +1,5 @@
 ﻿using RestSharp;
+using CodeAdvent.Common.Models;
 using System.Text.RegularExpressions;
 
 namespace CodeAdvent.Common
@@ -13,7 +14,7 @@ namespace CodeAdvent.Common
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         /// <exception cref="UriFormatException"></exception>
-        public static async Task<string> GetInput(int year, int day)
+        public static async Task<CodeAdventEvent> GetEvent(int year, int day)
         {
             if (!TryGetEnvironmentVariable("AOCSession", out string token))
                 throw new Exception("Missing environment variable: AOCSession.");
@@ -37,15 +38,19 @@ namespace CodeAdvent.Common
                 {
                     await File.WriteAllTextAsync(cache, response.Content);
 
-                    return await File.ReadAllTextAsync(cache);
+                    string input = await File.ReadAllTextAsync(cache);
+
+                    return new() { Year = year, Day = day, Input = input };
                 }
             }
             else
             {
-                return await File.ReadAllTextAsync(cache);
+                string input = await File.ReadAllTextAsync(cache);
+
+                return new() { Year = year, Day = day, Input = input };
             }
 
-            return null;
+            return new() { Year = year, Day = day, Input = null };
         }
 
         public static IEnumerable<T> MapInput<T>(string input, string pattern, Func<Match, T> action)

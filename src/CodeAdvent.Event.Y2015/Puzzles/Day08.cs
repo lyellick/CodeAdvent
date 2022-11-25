@@ -8,20 +8,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day08
     {
-        private string _input;
+        private CodeAdventEvent _event;
 
         [SetUp]
         public async Task Setup()
         {
-            _input = await CodeAdventData.GetInput(2015, 8);
+            _event = await CodeAdventData.GetEvent(2015, 8);
 
-            Assert.That(_input, Is.Not.Null.Or.Empty);
+            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var sizes = CalcListSize(_input);
+            var sizes = CalcListSize(_event.Input);
 
             int size = sizes.stringLiteralSize - sizes.inMemorySize;
 
@@ -31,7 +31,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            var sizes = CalcListSize(_input, true);
+            var sizes = CalcListSize(_event.Input, true);
 
             int size = sizes.inMemorySize - sizes.stringLiteralSize;
 
