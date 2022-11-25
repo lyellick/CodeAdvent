@@ -1,9 +1,3 @@
-using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.Reflection.PortableExecutable;
-using System.Text.RegularExpressions;
-
 namespace CodeAdvent.Event.Y2015.Puzzles
 {
     /// <summary>
