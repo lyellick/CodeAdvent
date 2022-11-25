@@ -13,7 +13,7 @@ namespace CodeAdvent.Common
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         /// <exception cref="UriFormatException"></exception>
-        public static async Task<string> GetData(int year, int day)
+        public static async Task<string> GetInput(int year, int day)
         {
             if (!TryGetEnvironmentVariable("AOCSession", out string token))
                 throw new Exception("Missing environment variable: AOCSession.");
@@ -48,7 +48,7 @@ namespace CodeAdvent.Common
             return null;
         }
 
-        public static IEnumerable<T> MapData<T>(string input, string pattern, Func<Match, T> action)
+        public static IEnumerable<T> MapInput<T>(string input, string pattern, Func<Match, T> action)
         {
             Regex find = new(pattern);
 
