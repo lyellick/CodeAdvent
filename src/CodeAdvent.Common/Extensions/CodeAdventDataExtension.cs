@@ -12,7 +12,8 @@ namespace CodeAdvent.Common.Extensions
             using var reader = new StringReader(codeAdventEvent.Input);
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                yield return action(find.Match(line));
+                foreach (Match match in find.Matches(line))
+                    yield return action(match);
         }
 
         public static IEnumerable<string> ToEnumerable(this CodeAdventEvent codeAdventEvent)
