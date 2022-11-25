@@ -14,5 +14,13 @@ namespace CodeAdvent.Common.Extensions
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                 yield return action(find.Match(line));
         }
+
+        public static IEnumerable<string> ToEnumerable(this CodeAdventEvent codeAdventEvent)
+        {
+            using var reader = new StringReader(codeAdventEvent.Input);
+
+            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+                yield return line;
+        }
     }
 }
