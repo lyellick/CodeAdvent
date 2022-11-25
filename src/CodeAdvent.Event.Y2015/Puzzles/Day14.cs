@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection.PortableExecutable;
@@ -38,7 +39,13 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
         private (string reindeer, double speed, double duration, double rest, double distance)[] ProcessReindeerSimulation(string input, int seconds)
         {
-            var reindeer = MapReindeerStats(input).ToArray();
+            var reindeer = CodeAdventData.MapData<(string reindeer, double speed, double duration, double rest, double distance)>(input, @"(.*) can fly (.*) km\/s for (.*) seconds, but then must rest for (.*) seconds.", (match) =>
+            {
+                if (double.TryParse(match.Groups[2].Value, out double speed) && double.TryParse(match.Groups[3].Value, out double duration) && double.TryParse(match.Groups[4].Value, out double rest))
+                    return (match.Groups[1].Value, speed, duration, rest, 0);
+
+                return ("", 0, 0, 0, 0);
+            }).ToArray();
 
             for (int i = 0; i < reindeer.Length; i++)
             {
@@ -46,21 +53,6 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             }
 
             return reindeer;
-        }
-
-        private IEnumerable<(string reindeer, double speed, double duration, double rest, double distance)> MapReindeerStats(string input)
-        {
-            Regex pattern = new(@"(.*) can fly (.*) km\/s for (.*) seconds, but then must rest for (.*) seconds.");
-
-            using var reader = new StringReader(input);
-
-            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-            {
-                var found = pattern.Match(line);
-
-                if (double.TryParse(found.Groups[2].Value, out double speed) && double.TryParse(found.Groups[3].Value, out double duration) && double.TryParse(found.Groups[4].Value, out double rest))
-                    yield return (found.Groups[1].Value, speed, duration, rest, 0);
-            }
         }
     }
 }
