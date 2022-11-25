@@ -25,6 +25,8 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         {
             var results = ProcessReindeerSimulation(_input, 2503).OrderByDescending(simulation => simulation.distance);
 
+            double distance = results.First().distance;
+
             Assert.Pass();
         }
 
@@ -34,39 +36,19 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             Assert.Pass();
         }
 
-        private (string reindeer, int speed, int duration, int rest, int distance, bool fly)[] ProcessReindeerSimulation(string input, int seconds)
+        private (string reindeer, double speed, double duration, double rest, double distance)[] ProcessReindeerSimulation(string input, int seconds)
         {
             var reindeer = MapReindeerStats(input).ToArray();
 
-            reindeer = new (string reindeer, int speed, int duration, int rest, int distance, bool fly)[] { ("Comet", 14, 10, 127, 0, true), ("Dancer", 16, 11, 162, 0, true) };
-
-            seconds = 1000;
-
-            int second = 0;
-
-            do
+            for (int i = 0; i < reindeer.Length; i++)
             {
-                second++;
-
-                for (int i = 0; i < reindeer.Length; i++)
-                {
-                    if (reindeer[i].fly)
-                    {
-                        reindeer[i].distance += reindeer[i].speed;
-
-                        reindeer[i].fly = second % reindeer[i].duration != 0;
-                    }
-                    else
-                    {
-                        reindeer[i].fly = second % reindeer[i].rest == 0;
-                    }
-                }
-            } while (second != seconds);
+                reindeer[i].distance = Math.Ceiling(seconds / (reindeer[i].duration + reindeer[i].rest)) * (reindeer[i].speed * reindeer[i].duration);
+            }
 
             return reindeer;
         }
 
-        private IEnumerable<(string reindeer, int speed, int duration, int rest, int distance, bool fly)> MapReindeerStats(string input)
+        private IEnumerable<(string reindeer, double speed, double duration, double rest, double distance)> MapReindeerStats(string input)
         {
             Regex pattern = new(@"(.*) can fly (.*) km\/s for (.*) seconds, but then must rest for (.*) seconds.");
 
@@ -76,8 +58,8 @@ namespace CodeAdvent.Event.Y2015.Puzzles
             {
                 var found = pattern.Match(line);
 
-                if (int.TryParse(found.Groups[2].Value, out int speed) && int.TryParse(found.Groups[3].Value, out int duration) && int.TryParse(found.Groups[4].Value, out int rest))
-                    yield return (found.Groups[1].Value, speed, duration, rest, 0, true);
+                if (double.TryParse(found.Groups[2].Value, out double speed) && double.TryParse(found.Groups[3].Value, out double duration) && double.TryParse(found.Groups[4].Value, out double rest))
+                    yield return (found.Groups[1].Value, speed, duration, rest, 0);
             }
         }
     }
