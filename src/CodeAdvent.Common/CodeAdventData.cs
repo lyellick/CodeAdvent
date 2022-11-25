@@ -1,6 +1,5 @@
 ﻿using RestSharp;
 using CodeAdvent.Common.Models;
-using System.Text.RegularExpressions;
 
 namespace CodeAdvent.Common
 {
@@ -51,16 +50,6 @@ namespace CodeAdvent.Common
             }
 
             return new() { Year = year, Day = day, Input = null };
-        }
-
-        public static IEnumerable<T> MapInput<T>(string input, string pattern, Func<Match, T> action)
-        {
-            Regex find = new(pattern);
-
-            using var reader = new StringReader(input);
-
-            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                yield return action(find.Match(line));
         }
 
         private static bool TryGetEnvironmentVariable(string key, out string value)

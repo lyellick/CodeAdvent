@@ -33,7 +33,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
         private (string reindeer, double speed, double duration, double rest, double distance)[] ProcessReindeerSimulation(string input, int seconds)
         {
-            var reindeer = CodeAdventData.MapInput<(string reindeer, double speed, double duration, double rest, double distance)>(input, @"(.*) can fly (.*) km\/s for (.*) seconds, but then must rest for (.*) seconds.", (match) =>
+            var reindeer = _event.Map<(string reindeer, double speed, double duration, double rest, double distance)>(@"(.*) can fly (.*) km\/s for (.*) seconds, but then must rest for (.*) seconds.", (match) =>
             {
                 if (double.TryParse(match.Groups[2].Value, out double speed) && double.TryParse(match.Groups[3].Value, out double duration) && double.TryParse(match.Groups[4].Value, out double rest))
                     return (match.Groups[1].Value, speed, duration, rest, 0);
