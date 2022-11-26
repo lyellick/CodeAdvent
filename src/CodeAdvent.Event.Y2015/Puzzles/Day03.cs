@@ -9,20 +9,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day03
     {
-        private CodeAdventEvent _event;
+        private CodeAdventPuzzle _puzzle;
 
         [SetUp]
         public async Task Setup()
         {
-            _event = await CodeAdventData.GetEvent(2015, 3);
+            _puzzle = await CodeAdventData.GetPuzzle(2015, 3);
 
-            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
+            Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            int visits = Visits(_event.Input).Count();
+            int visits = Visits(_puzzle.Input).Count();
 
             Assert.That(visits, Is.EqualTo(2081));
         }
@@ -30,9 +30,9 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            var santa = Visits(string.Join("", _event.Input.Where((c, i) => i % 2 == 0)));
+            var santa = Visits(string.Join("", _puzzle.Input.Where((c, i) => i % 2 == 0)));
 
-            var robot = Visits(string.Join("", _event.Input.Where((c, i) => i % 2 != 0)));
+            var robot = Visits(string.Join("", _puzzle.Input.Where((c, i) => i % 2 != 0)));
 
             var visited = santa.Concat(robot).ToHashSet().Count;
 

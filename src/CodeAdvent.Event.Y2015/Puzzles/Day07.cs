@@ -8,20 +8,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day07
     {
-        private CodeAdventEvent _event;
+        private CodeAdventPuzzle _puzzle;
 
         [SetUp]
         public async Task Setup()
         {
-            _event = await CodeAdventData.GetEvent(2015, 7);
+            _puzzle = await CodeAdventData.GetPuzzle(2015, 7);
 
-            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
+            Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            int signal = ProcessInstructions(_event.Input).First(circut => circut.wire.Equals("a")).signal.Value;
+            int signal = ProcessInstructions(_puzzle.Input).First(circut => circut.wire.Equals("a")).signal.Value;
 
             Assert.That(signal, Is.EqualTo(3176));
         }
@@ -29,22 +29,22 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            int signal = ProcessInstructions(_event.Input).First(circut => circut.wire.Equals("a")).signal.Value;
+            int signal = ProcessInstructions(_puzzle.Input).First(circut => circut.wire.Equals("a")).signal.Value;
 
             Assert.That(signal, Is.EqualTo(3176));
 
             Regex search = new($@".*(?=\b -> b\b).*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            _event.Input = search.Replace(_event.Input, $"{signal} -> b");
+            _puzzle.Input = search.Replace(_puzzle.Input, $"{signal} -> b");
 
-            int newSignal = ProcessInstructions(_event.Input).First(circut => circut.wire.Equals("a")).signal.Value;
+            int newSignal = ProcessInstructions(_puzzle.Input).First(circut => circut.wire.Equals("a")).signal.Value;
 
             Assert.That(newSignal, Is.EqualTo(14710));
         }
 
         private (string gate, string wire, int? signal)[] ProcessInstructions(string input)
         {
-            var circuits = MapInstructions(_event.Input).ToArray();
+            var circuits = MapInstructions(_puzzle.Input).ToArray();
 
             do
             {

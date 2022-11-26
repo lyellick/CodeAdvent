@@ -5,20 +5,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day01
     {
-        private CodeAdventEvent _event;
+        private CodeAdventPuzzle _puzzle;
 
         [SetUp]
         public async Task Setup()
         {
-            _event = await CodeAdventData.GetEvent(2015, 1);
+            _puzzle = await CodeAdventData.GetPuzzle(2015, 1);
 
-            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
+            Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            int floor = Levels(_event.Input).Last().floor;
+            int floor = Levels(_puzzle.Input).Last().floor;
 
             Assert.That(floor, Is.EqualTo(138));
         }
@@ -26,7 +26,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            int position = Levels(_event.Input).First(c => c.floor.Equals(-1)).position;
+            int position = Levels(_puzzle.Input).First(c => c.floor.Equals(-1)).position;
 
             Assert.That(position, Is.EqualTo(1771));
         }
@@ -37,7 +37,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
             for (int i = 0; i < input.Length; i++)
             {
-                floor += _event.Input[i].Equals('(') ? 1 : -1;
+                floor += _puzzle.Input[i].Equals('(') ? 1 : -1;
                 
                 yield return (i+1, floor);
             }

@@ -5,20 +5,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day02
     {
-        private CodeAdventEvent _event;
+        private CodeAdventPuzzle _puzzle;
 
         [SetUp]
         public async Task Setup()
         {
-            _event = await CodeAdventData.GetEvent(2015, 2);
+            _puzzle = await CodeAdventData.GetPuzzle(2015, 2);
 
-            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
+            Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            int paper = Boxes(_event.Input).Sum(d => d.paper);
+            int paper = Boxes(_puzzle.Input).Sum(d => d.paper);
 
             Assert.That(paper, Is.EqualTo(1586300));
         }
@@ -26,7 +26,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            int ribbon = Boxes(_event.Input).Sum(d => d.ribbon);
+            int ribbon = Boxes(_puzzle.Input).Sum(d => d.ribbon);
 
             Assert.That(ribbon, Is.EqualTo(3737498));
         }

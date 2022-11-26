@@ -7,20 +7,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day12
     {
-        private CodeAdventEvent _event;
+        private CodeAdventPuzzle _puzzle;
 
         [SetUp]
         public async Task Setup()
         {
-            _event = await CodeAdventData.GetEvent(2015, 12);
+            _puzzle = await CodeAdventData.GetPuzzle(2015, 12);
 
-            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
+            Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            int sum = ProcessJson(_event.Input);
+            int sum = ProcessJson(_puzzle.Input);
 
             Assert.That(sum, Is.EqualTo(191164));
         }
@@ -28,7 +28,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            int sum = ProcessJson(_event.Input, "red");
+            int sum = ProcessJson(_puzzle.Input, "red");
 
             Assert.That(sum, Is.EqualTo(87842));
         }

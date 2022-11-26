@@ -15,17 +15,14 @@ namespace CodeAdvent.Common
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         /// <exception cref="UriFormatException"></exception>
-        public static async Task<CodeAdventEvent> GetEvent(int year, int day)
+        public static async Task<CodeAdventPuzzle> GetPuzzle(int year, int day)
         {
-            CodeAdventEvent codeAdventEvent = new();
+            CodeAdventPuzzle codeAdventEvent = new();
 
             Regex pattern = new(@"<h2>--- Day \d: (.*) ---<\/h2>");
 
             if (!TryGetEnvironmentVariable("AOCSession", out string token))
                 throw new Exception("Missing environment variable: AOCSession.");
-
-            if (!Uri.TryCreate($@"https://adventofcode.com/{year}", UriKind.RelativeOrAbsolute, out Uri calendarUri))
-                throw new UriFormatException();
 
             if (!Uri.TryCreate($@"https://adventofcode.com/{year}/day/{day}/input", UriKind.RelativeOrAbsolute, out Uri puzzleInputUri))
                 throw new UriFormatException();
@@ -69,8 +66,6 @@ namespace CodeAdvent.Common
             {
                 var match = pattern.Match(puzzlePage);
                 codeAdventEvent.Title = match.Groups[1].Value;
-                codeAdventEvent.Calendar = calendarUri;
-                codeAdventEvent.Puzzle = puzzlePageUri;
             }
 
             return codeAdventEvent;

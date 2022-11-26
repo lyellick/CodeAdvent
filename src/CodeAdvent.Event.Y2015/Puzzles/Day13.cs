@@ -9,20 +9,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day13
     {
-        private CodeAdventEvent _event;
+        private CodeAdventPuzzle _puzzle;
 
         [SetUp]
         public async Task Setup()
         {
-            _event = await CodeAdventData.GetEvent(2015, 13);
+            _puzzle = await CodeAdventData.GetPuzzle(2015, 13);
 
-            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
+            Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var plan = ProcessOptimalSeatingArrangement(_event.Input).OrderByDescending(arrangement => arrangement.units.Sum());
+            var plan = ProcessOptimalSeatingArrangement(_puzzle.Input).OrderByDescending(arrangement => arrangement.units.Sum());
 
             int sum = plan.First().units.Sum();
 
@@ -32,24 +32,24 @@ namespace CodeAdvent.Event.Y2015.Puzzles
         [Test]
         public void Part2()
         {
-            _event.Input += "Alice would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nBob would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nCarol would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nDavid would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nEric would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nFrank would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nGeorge would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nMallory would none 0 happiness units by sitting next to Lincoln.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Alice.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Bob.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Carol.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to David.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Eric.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Frank.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to George.";
-            _event.Input += "\nLincoln would none 0 happiness units by sitting next to Mallory.";
+            _puzzle.Input += "Alice would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nBob would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nCarol would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nDavid would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nEric would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nFrank would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nGeorge would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nMallory would none 0 happiness units by sitting next to Lincoln.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to Alice.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to Bob.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to Carol.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to David.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to Eric.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to Frank.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to George.";
+            _puzzle.Input += "\nLincoln would none 0 happiness units by sitting next to Mallory.";
 
-            var plan = ProcessOptimalSeatingArrangement(_event.Input).OrderByDescending(arrangement => arrangement.units.Sum());
+            var plan = ProcessOptimalSeatingArrangement(_puzzle.Input).OrderByDescending(arrangement => arrangement.units.Sum());
 
             int sum = plan.First().units.Sum();
 

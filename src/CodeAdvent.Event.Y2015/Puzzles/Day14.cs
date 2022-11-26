@@ -5,20 +5,20 @@ namespace CodeAdvent.Event.Y2015.Puzzles
     /// </summary>
     public class Day14
     {
-        private CodeAdventEvent _event;
+        private CodeAdventPuzzle _puzzle;
 
         [SetUp]
         public async Task Setup()
         {
-            _event = await CodeAdventData.GetEvent(2015, 14);
+            _puzzle = await CodeAdventData.GetPuzzle(2015, 14);
 
-            Assert.That(_event.Input, Is.Not.Null.Or.Empty);
+            Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            var results = ProcessReindeerSimulation(_event.Input, 2503).OrderByDescending(simulation => simulation.distance);
+            var results = ProcessReindeerSimulation(_puzzle.Input, 2503).OrderByDescending(simulation => simulation.distance);
 
             double distance = results.First().distance;
 
@@ -33,7 +33,7 @@ namespace CodeAdvent.Event.Y2015.Puzzles
 
         private (string reindeer, double speed, double duration, double rest, double distance)[] ProcessReindeerSimulation(string input, int seconds)
         {
-            var reindeer = _event.ToEnumerable<(string reindeer, double speed, double duration, double rest, double distance)>(@"(.*) can fly (.*) km\/s for (.*) seconds, but then must rest for (.*) seconds.", (match) =>
+            var reindeer = _puzzle.ToEnumerable<(string reindeer, double speed, double duration, double rest, double distance)>(@"(.*) can fly (.*) km\/s for (.*) seconds, but then must rest for (.*) seconds.", (match) =>
             {
                 if (double.TryParse(match.Groups[2].Value, out double speed) && double.TryParse(match.Groups[3].Value, out double duration) && double.TryParse(match.Groups[4].Value, out double rest))
                     return (match.Groups[1].Value, speed, duration, rest, 0);

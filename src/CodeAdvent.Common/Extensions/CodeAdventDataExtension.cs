@@ -5,7 +5,7 @@ namespace CodeAdvent.Common.Extensions
 {
     public static class CodeAdventDataExtension
     {
-        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventEvent codeAdventEvent)
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent)
         {
             using var reader = new StringReader(codeAdventEvent.Input);
 
@@ -13,7 +13,7 @@ namespace CodeAdvent.Common.Extensions
                 yield return (T)Convert.ChangeType(line, typeof(T)); ;
         }
 
-        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventEvent codeAdventEvent, Func<string, T> action)
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, Func<string, T> action)
         {
             using var reader = new StringReader(codeAdventEvent.Input);
 
@@ -22,7 +22,7 @@ namespace CodeAdvent.Common.Extensions
 
         }
 
-        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventEvent codeAdventEvent, string pattern, Func<Match, T> action)
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<Match, T> action)
         {
             Regex find = new(pattern);
 
