@@ -12,7 +12,7 @@ namespace CodeAdvent.Common.Extensions
             using var reader = new StringReader(codeAdventEvent.Input);
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                foreach (Match match in find.Matches(line))
+                foreach (Match match in find.Matches(line).Cast<Match>())
                     yield return action(match);
         }
 
