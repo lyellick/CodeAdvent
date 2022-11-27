@@ -24,7 +24,9 @@ namespace CodeAdvent.Event.Y2020.Puzzles
             var corruption = _puzzle.ToEnumerable<(int lowest, int highest, string character, string password)>(@"(.*)-(.*) (.*): (.*)", (match) => 
                 (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), match.Groups[3].Value, match.Groups[4].Value)).ToArray();
 
-            Assert.Pass();
+            var valid = corruption.Where(line => Regex.Matches(line.password, line.character).Count >= line.lowest && Regex.Matches(line.password, line.character).Count <= line.highest).Count();
+
+            Assert.That(valid, Is.EqualTo(506));
         }
 
         [Test]
