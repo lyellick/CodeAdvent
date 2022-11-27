@@ -21,7 +21,7 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
-            var corruption = _puzzle.ToEnumerable<(int lowest, int highest, string character, string password)>(@"(.*)-(.*) (.*): (.*)", (match) => 
+            var corruption = _puzzle.ToEnumerable<(int lowest, int highest, string character, string password)>(@"(.*)-(.*) (.*): (.*)", (match) =>
                 (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), match.Groups[3].Value, match.Groups[4].Value)).ToArray();
 
             var valid = corruption.Where(line => Regex.Matches(line.password, line.character).Count >= line.lowest && Regex.Matches(line.password, line.character).Count <= line.highest).Count();
@@ -32,7 +32,15 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var corruption = _puzzle.ToEnumerable<(int lowest, int highest, char character, string password)>(@"(.*)-(.*) (.*): (.*)", (match) =>
+                (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), char.Parse(match.Groups[3].Value), match.Groups[4].Value)).ToArray();
+
+            var valid = corruption.Where(line => 
+                line.password[line.lowest - 1] == line.character && line.password[line.highest - 1] != line.character 
+                || line.password[line.lowest - 1] != line.character && line.password[line.highest - 1] == line.character)
+                .Count();
+
+            Assert.That(valid, Is.EqualTo(443));
         }
     }
 }
