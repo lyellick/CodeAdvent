@@ -29,8 +29,18 @@ namespace CodeAdvent.Common.Extensions
             using var reader = new StringReader(codeAdventEvent.Input);
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                foreach (Match match in find.Matches(line).Cast<Match>())
-                    yield return action(match);
+                yield return action(find.Match(line));
+
+        }
+
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<MatchCollection, T> action)
+        {
+            Regex find = new(pattern);
+
+            using var reader = new StringReader(codeAdventEvent.Input);
+
+            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+                    yield return action(find.Matches(line));
         }
     }
 }
