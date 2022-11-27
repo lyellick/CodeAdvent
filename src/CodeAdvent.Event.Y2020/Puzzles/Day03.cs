@@ -18,9 +18,34 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
-            var rows = _puzzle.ToEnumerable((line) => line.Select(c => c == '#' ? 1 : 0).ToArray());
+            int trees = 0;
+            int row = 0;
+            int col = 0;
 
-            Assert.Pass();
+            var rows = _puzzle.ToEnumerable((line) => line.Select(c => c == '#' ? 1 : 0).ToArray()).ToArray();
+
+            do
+            {
+                if (col > rows[row].Length)
+                {
+                    do
+                    {
+                        var list = rows[row].ToList();
+                        list.AddRange(rows[row]);
+
+                        rows[row] = list.ToArray();
+                    } while (!(col < rows[row].Length));
+                }
+
+                if (rows[row][col] == 1)
+                    trees++;
+
+                row++;
+                col += 3;
+
+            } while (row < rows.Length);
+
+            Assert.That(trees, Is.EqualTo(268));
         }
 
         [Test]
