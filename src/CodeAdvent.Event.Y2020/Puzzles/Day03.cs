@@ -18,15 +18,36 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
+            var rows = _puzzle.ToEnumerable((line) => line.Select(c => c == '#' ? 1 : 0).ToArray()).ToArray();
+
+            int trees = SimiulateTrajectory(rows, (3, 1));
+
+            Assert.That(trees, Is.EqualTo(268));
+        }
+
+        [Test]
+        public void Part2()
+        {
+            var slopes = new (int right, int down)[] { (1, 1), (3, 1), (5, 1), (7, 1), (1, 2) };
+
+            var rows = _puzzle.ToEnumerable((line) => line.Select(c => c == '#' ? 1 : 0).ToArray()).ToArray();
+
+            var trees = slopes.Select(slope => SimiulateTrajectory(rows, slope)).ToArray();
+
+            var total = (Int64)trees[0] * (Int64)trees[1] * (Int64)trees[2] * (Int64)trees[3] * (Int64)trees[4];
+
+            Assert.That(total, Is.EqualTo(3093068400));
+        }
+
+        private int SimiulateTrajectory(int[][] rows, (int right, int down) slope)
+        {
             int trees = 0;
             int row = 0;
             int col = 0;
 
-            var rows = _puzzle.ToEnumerable((line) => line.Select(c => c == '#' ? 1 : 0).ToArray()).ToArray();
-
             do
             {
-                if (col > rows[row].Length)
+                if (col >= rows[row].Length)
                 {
                     do
                     {
@@ -40,18 +61,12 @@ namespace CodeAdvent.Event.Y2020.Puzzles
                 if (rows[row][col] == 1)
                     trees++;
 
-                row++;
-                col += 3;
+                row += slope.down;
+                col += slope.right;
 
             } while (row < rows.Length);
 
-            Assert.That(trees, Is.EqualTo(268));
-        }
-
-        [Test]
-        public void Part2()
-        {
-            Assert.Pass();
+            return trees;
         }
     }
 }
