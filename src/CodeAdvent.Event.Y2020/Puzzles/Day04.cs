@@ -10,6 +10,8 @@ namespace CodeAdvent.Event.Y2020.Puzzles
     {
         private CodeAdventPuzzle _puzzle;
 
+        private readonly Dictionary<string, string> _fields = new() { { "byr", "Birth Year" }, { "iyr", "Issue Year" }, { "eyr", "Expiration Year" }, { "hgt", "Height" }, { "hcl", "Hair Color" }, { "ecl", "Eye Color" }, { "pid", "Passport ID" }, { "cid", "Country ID" } };
+
         [SetUp]
         public async Task Setup()
         {
@@ -23,11 +25,11 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
-            var fields = new Dictionary<string, string> { { "byr", "Birth Year" }, { "iyr", "Issue Year" }, { "eyr", "Expiration Year" }, { "hgt", "Height" }, { "hcl", "Hair Color" }, { "ecl", "Eye Color" }, { "pid", "Passport ID" }, { "cid", "Country ID" } };
-
             var passports = _puzzle.ToEnumerable(@"(\w+):([^\s]+)", (matches) => matches.ToDictionary(match => match.Groups[1].Value, match => match.Groups[2].Value)).ToArray();
 
-            Assert.Pass();
+            int valid = passports.Count(passport => passport.Count == _fields.Count || (passport.Count == _fields.Count - 1 && !passport.ContainsKey("cid")));
+
+            Assert.That(valid, Is.EqualTo(228));
         }
 
         [Test]
