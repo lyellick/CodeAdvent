@@ -19,13 +19,26 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
-            int rows = 128, cols = 8;
+            int[] ids = ProcessSeats(_puzzle, 128, 8);
+
+            int highest = ids.Max();
+
+            Assert.That(highest, Is.EqualTo(832));
+        }
+
+        [Test]
+        public void Part2()
+        {
+            Assert.Pass();
+        }
+
+        private int[] ProcessSeats(CodeAdventPuzzle puzzle, int rows, int cols)
+        {
+            var ids = new List<int>();
 
             Regex pattern = new(@"R(.*)C(.*)");
 
-            var ids = new List<int>();
-
-            var calls = _puzzle.ToEnumerable((line) => line.ToArray()).ToArray();
+            var calls = puzzle.ToEnumerable((line) => line.ToArray()).ToArray();
 
             string[][] seats = new string[rows][].Select(i => i = new string[cols]).ToArray();
 
@@ -42,15 +55,7 @@ namespace CodeAdvent.Event.Y2020.Puzzles
                 ids.Add(int.Parse(match.Groups[1].Value) * 8 + int.Parse(match.Groups[2].Value));
             }
 
-            int highest = ids.Max();
-
-            Assert.That(highest, Is.EqualTo(832));
-        }
-
-        [Test]
-        public void Part2()
-        {
-            Assert.Pass();
+            return ids.ToArray();
         }
 
         private string[][] ProcessSeatBSP(string[][] seats, char[] instructions, int position)
