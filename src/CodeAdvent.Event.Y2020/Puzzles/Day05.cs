@@ -54,7 +54,7 @@ namespace CodeAdvent.Event.Y2020.Puzzles
 
             foreach (var instructions in calls)
             {
-                var seat = ProcessSeatBSP(seats, instructions, 0);
+                var seat = ProcessSeat(seats, instructions, 0);
 
                 var match = pattern.Match(seat[0][0]);
 
@@ -64,7 +64,7 @@ namespace CodeAdvent.Event.Y2020.Puzzles
             return ids.ToArray();
         }
 
-        private string[][] ProcessSeatBSP(string[][] seats, char[] instructions, int position)
+        private string[][] ProcessSeat(string[][] seats, char[] instructions, int position)
         {
             if (position < instructions.Length)
             {
@@ -99,7 +99,7 @@ namespace CodeAdvent.Event.Y2020.Puzzles
                     }
                 }
 
-                seats = ProcessSeatBSP(seats, instructions, position + 1);
+                seats = ProcessSeat(seats, instructions, position + 1);
             }
 
             return seats;
