@@ -29,7 +29,13 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            int[] ids = ProcessSeats(_puzzle, 128, 8).OrderBy(id => id).ToArray();
+
+            int[] missing = Enumerable.Range(ids[0], ids[^1]).Except(ids).OrderBy(id => id).ToArray();
+
+            int id = missing.First();
+
+            Assert.That(id, Is.EqualTo(517));
         }
 
         private int[] ProcessSeats(CodeAdventPuzzle puzzle, int rows, int cols)
