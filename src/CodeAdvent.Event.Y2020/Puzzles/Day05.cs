@@ -17,6 +17,8 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
+            var calls = _puzzle.ToEnumerable((line) => line.Split("")).ToArray();
+
             Assert.Pass();
         }
 
