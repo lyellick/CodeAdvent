@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace CodeAdvent.Event.Y2020.Puzzles
 {
     /// <summary>
@@ -19,20 +21,30 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         {
             int rows = 128, cols = 8;
 
+            Regex pattern = new(@"R(.*)C(.*)");
+
+            var ids = new List<int>();
+
             var calls = _puzzle.ToEnumerable((line) => line.ToArray()).ToArray();
 
-            int[][] seats = new int[rows][].Select(i => i = new int[cols]).ToArray();
+            string[][] seats = new string[rows][].Select(i => i = new string[cols]).ToArray();
 
             for (int row = 0; row < rows; row++)
                 for (int col = 0; col < cols; col++)
-                    seats[row][col] = row;
+                    seats[row][col] = $"R{row}C{col}";
 
             foreach (var instructions in calls)
             {
-                ProcessSeatBSP(seats, instructions, 0);
+                var seat = ProcessSeatBSP(seats, instructions, 0);
+
+                var match = pattern.Match(seat[0][0]);
+
+                ids.Add(int.Parse(match.Groups[1].Value) * 8 + int.Parse(match.Groups[2].Value));
             }
 
-            Assert.Pass();
+            int highest = ids.Max();
+
+            Assert.That(highest, Is.EqualTo(832));
         }
 
         [Test]
@@ -41,10 +53,8 @@ namespace CodeAdvent.Event.Y2020.Puzzles
             Assert.Pass();
         }
 
-        private (int row, int col) ProcessSeatBSP(int[][] seats, char[] instructions, int position)
+        private string[][] ProcessSeatBSP(string[][] seats, char[] instructions, int position)
         {
-            var seat = (0, 0);
-
             if (position < instructions.Length)
             {
                 char instruction = instructions[position];
@@ -65,23 +75,23 @@ namespace CodeAdvent.Event.Y2020.Puzzles
                 }
                 else
                 {
-                    int center = seats[^1].Length / 2;
+                    int center = seats[0].Length / 2;
 
                     switch (instruction)
                     {
                         case 'L':
-                            seats[^1] = seats[^1][0..center];
+                            seats[0] = seats[0][0..center];
                             break;
                         case 'R':
-                            seats[^1] = seats[^1][center..seats[^1].Length];
+                            seats[0] = seats[0][center..seats[0].Length];
                             break;
                     }
                 }
 
-                seat = ProcessSeatBSP(seats, instructions, position + 1);
+                seats = ProcessSeatBSP(seats, instructions, position + 1);
             }
 
-            return seat;
+            return seats;
         }
     }
 }
