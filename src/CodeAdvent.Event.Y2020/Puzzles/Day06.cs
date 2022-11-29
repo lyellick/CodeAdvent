@@ -12,13 +12,19 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         {
             _puzzle = await CodeAdventData.GetPuzzle(2020, 6);
 
+            _puzzle.Input = _puzzle.Input.Replace("\n", " ").Replace("  ", "\n");
+
             Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            Assert.Pass();
+            var groups = _puzzle.ToEnumerable((line) => line.Split(" ").SelectMany(arry => arry).ToHashSet());
+
+            var count = groups.Select(group => group.Count).Sum();
+
+            Assert.That(count, Is.EqualTo(6587));
         }
 
         [Test]
