@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAdvent.Common", "CodeAd
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAdvent.Event.Y2015", "CodeAdvent.Event.Y2015\CodeAdvent.Event.Y2015.csproj", "{6D5B1A82-4B59-410B-A5D2-27B9BA6505FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAdvent.Event.Y2020", "CodeAdvent.Event.Y2020\CodeAdvent.Event.Y2020.csproj", "{EE675E3C-EB53-4AA0-97FA-B0338FFA8986}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeAdvent.Event.Y2020", "CodeAdvent.Event.Y2020\CodeAdvent.Event.Y2020.csproj", "{EE675E3C-EB53-4AA0-97FA-B0338FFA8986}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeAdvent.Event.Y2022", "CodeAdvent.Event.Y2022\CodeAdvent.Event.Y2022.csproj", "{95E27D12-8242-42CD-B57E-731204041CE4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{EE675E3C-EB53-4AA0-97FA-B0338FFA8986}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE675E3C-EB53-4AA0-97FA-B0338FFA8986}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE675E3C-EB53-4AA0-97FA-B0338FFA8986}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95E27D12-8242-42CD-B57E-731204041CE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95E27D12-8242-42CD-B57E-731204041CE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95E27D12-8242-42CD-B57E-731204041CE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95E27D12-8242-42CD-B57E-731204041CE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
