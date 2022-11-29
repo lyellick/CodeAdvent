@@ -18,6 +18,19 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
+            var bags = _puzzle.ToEnumerable<(string parent, (int count, string bag)[] children)>(@"(.*) bags contain (.*)", (match) => 
+                {
+                    string parent = match.Groups[1].Value;
+
+                    string[] bags = match.Groups[2].Value.Contains("no other")
+                        ? Array.Empty<string>()
+                        : match.Groups[2].Value.Split(",").Select(bag => bag.Replace(".", "").Replace("bags", "").Replace("bag", "").Trim()).ToArray();
+
+                    var children = bags.Select(bag => (int.Parse(bag.Split(' ', 2)[0]), bag.Split(' ', 2)[1])).ToArray();
+
+                    return (parent, children);
+                }).ToArray();
+
             Assert.Pass();
         }
 
