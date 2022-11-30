@@ -1,8 +1,6 @@
 # 🎄 Advent of Code (2015 - Present)
 Public repository for the yearly Advent of Code challenges in C#.
 
-Event `DateTime.Now.Year` is never pushed till the event is completed!
-
 Thanks for fun/pain every year [@topaz](https://github.com/topaz)! 
 
 Make sure to [support](https://adventofcode.com/support) Eric!
