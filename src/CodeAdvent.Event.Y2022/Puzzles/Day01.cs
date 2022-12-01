@@ -11,13 +11,19 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             _puzzle = await CodeAdventData.GetPuzzle(2022, 1);
 
+            _puzzle.Input = _puzzle.Input.Replace("\n", " ").Replace("  ", "\n").Trim();
+
             Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
 
         [Test]
         public void Part1()
         {
-            Assert.Pass();
+            var elves = _puzzle.ToEnumerable((elf) => Array.ConvertAll(elf.Split(" "), calorie => int.Parse(calorie))).ToArray();
+
+            var calories = elves.Max(elf => elf.Sum());
+
+            Assert.That(calories, Is.EqualTo(71023));
         }
 
         [Test]
