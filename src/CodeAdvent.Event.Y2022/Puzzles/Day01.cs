@@ -29,7 +29,11 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var elves = _puzzle.ToEnumerable((elf) => Array.ConvertAll(elf.Split(" "), calorie => int.Parse(calorie))).ToArray();
+
+            var calories = elves.Select(elf => elf.Sum()).OrderByDescending(sum => sum).Take(3).Sum();
+
+            Assert.That(calories, Is.EqualTo(206289));
         }
     }
 }
