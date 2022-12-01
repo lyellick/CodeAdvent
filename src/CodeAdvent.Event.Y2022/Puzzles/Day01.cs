@@ -1,6 +1,7 @@
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
+    /// Day 1: Calorie Counting
     /// </summary>
     public class Day01
     {
