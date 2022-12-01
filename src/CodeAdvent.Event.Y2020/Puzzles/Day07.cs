@@ -18,7 +18,7 @@ namespace CodeAdvent.Event.Y2020.Puzzles
         [Test]
         public void Part1()
         {
-            var bags = _puzzle.ToEnumerable<(string parent, (int count, string type)[] children)>(@"(.*) bags contain (.*)", (match) => 
+            var nodes = _puzzle.ToEnumerable<(string node, (int count, string node)[] children)>(@"(.*) bags contain (.*)", (match) => 
                 {
                     string parent = match.Groups[1].Value;
 
@@ -30,8 +30,6 @@ namespace CodeAdvent.Event.Y2020.Puzzles
 
                     return (parent, children);
                 }).ToArray();
-
-
 
             Assert.Pass();
         }
