@@ -30,7 +30,13 @@ namespace CodeAdvent.Event.Y2021.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var measurements = _puzzle.ToEnumerable((measurement) => int.Parse(measurement)).ToArray();
+
+            var windows = measurements.Select((n, i) => i < measurements.Length - 2 ? new int[] { n, measurements[i + 1], measurements[i + 2] } : Array.Empty<int>()).ToArray();
+
+            var count = windows.Select((n, i) => i != 0 ? n.Sum() > windows[i - 1].Sum() ? 1 : 0 : 0).Sum();
+
+            Assert.That(count, Is.EqualTo(1597));
         }
     }
 }
