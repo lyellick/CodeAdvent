@@ -1,3 +1,5 @@
+using System.Diagnostics.Metrics;
+
 namespace CodeAdvent.Event.Y2021.Puzzles
 {
     /// <summary>
@@ -18,7 +20,11 @@ namespace CodeAdvent.Event.Y2021.Puzzles
         [Test]
         public void Part1()
         {
-            Assert.Pass();
+            var measurements = _puzzle.ToEnumerable((measurement) => int.Parse(measurement)).ToArray();
+
+            var count = measurements.Select((n, i) => i != 0 ? n > measurements[i - 1] ? 1 : 0 : 0).Sum();
+
+            Assert.That(count, Is.EqualTo(1553));
         }
 
         [Test]
