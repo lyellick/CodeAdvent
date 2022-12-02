@@ -14,7 +14,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             new() { { 'A', 'Z' }, { 'C', 'Y' }, { 'B', 'X' } };
         
         private readonly Dictionary<char, char> _draws = 
-            new() { { 'Z', 'C' }, { 'Y', 'B' }, { 'X', 'A' } };
+            new() { { 'C', 'Z' }, { 'B', 'Y' }, { 'A', 'X' } };
         
         private readonly Dictionary<char, int> _scores = 
             new() { { 'Z', 3 }, { 'Y', 2 }, { 'X', 1 } };
@@ -37,16 +37,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 char opponent = rounds[round].opponent, counter = rounds[round].counter;
 
                 // win
-                if (_wins[opponent] == counter)
-                    rounds[round].outcome = _scores[counter] + 6;
+                if (_wins[opponent] == counter) rounds[round].outcome = _scores[counter] + 6;
 
                 // draw
-                if (opponent == _draws[counter])
-                    rounds[round].outcome = _scores[counter] + 3;
+                if (_draws[opponent] == counter) rounds[round].outcome = _scores[counter] + 3;
 
                 // loose
-                if (_looses[opponent] == counter)
-                    rounds[round].outcome = _scores[counter] + 0;
+                if (_looses[opponent] == counter) rounds[round].outcome = _scores[counter] + 0;
             }
 
             var points = rounds.Sum(round => round.outcome);
@@ -59,7 +56,24 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             var rounds = _puzzle.ToEnumerable<(char opponent, char counter, int outcome)>((round) => (round[0], round[2], 0)).ToArray();
 
-            Assert.Pass();
+            for (int round = 0; round < rounds.Length; round++)
+            {
+                char opponent = rounds[round].opponent, counter = rounds[round].counter;
+
+                switch (counter)
+                {
+                    // win
+                    case 'Z': rounds[round].outcome = _scores[_wins[opponent]] + 6; break;
+                    // draw
+                    case 'Y': rounds[round].outcome = _scores[_draws[opponent]] + 3; break;
+                    // loose
+                    case 'X': rounds[round].outcome = _scores[_looses[opponent]] + 0; break;
+                }
+            }
+
+            var points = rounds.Sum(round => round.outcome);
+
+            Assert.That(points, Is.EqualTo(13726));
         }
     }
 }
