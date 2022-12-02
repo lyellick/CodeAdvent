@@ -1,10 +1,23 @@
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
+    /// Day 2: Rock Paper Scissors
     /// </summary>
     public class Day02
     {
         private CodeAdventPuzzle _puzzle;
+
+        private readonly Dictionary<char, char> _wins = 
+            new() { { 'A', 'Y' }, { 'C', 'X' }, { 'B', 'Z' } };
+        
+        private readonly Dictionary<char, char> _looses = 
+            new() { { 'A', 'Z' }, { 'C', 'Y' }, { 'B', 'X' } };
+        
+        private readonly Dictionary<char, char> _draws = 
+            new() { { 'Z', 'C' }, { 'Y', 'B' }, { 'X', 'A' } };
+        
+        private readonly Dictionary<char, int> _scores = 
+            new() { { 'Z', 3 }, { 'Y', 2 }, { 'X', 1 } };
 
         [SetUp]
         public async Task Setup()
@@ -17,15 +30,6 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            /**
-             * A for Rock, B for Paper, and C for Scissors
-             * X for Rock, Y for Paper, and Z for Scissors
-             */
-            var wins = new Dictionary<char, char> { { 'A', 'Y' }, { 'C', 'X' }, { 'B', 'Z' } };
-            var looses = new Dictionary<char, char> { { 'A', 'Z' }, { 'C', 'Y' }, { 'B', 'X' } };
-            var conversions = new Dictionary<char, char> { { 'Z', 'C' }, { 'Y', 'B' }, { 'X', 'A' } };
-            var scores = new Dictionary<char, int> { { 'Z', 3 }, { 'Y', 2 }, { 'X', 1 } };
-
             var rounds = _puzzle.ToEnumerable<(char opponent, char counter, int outcome)>((round) => (round[0], round[2], 0)).ToArray();
 
             for (int round = 0; round < rounds.Length; round++)
@@ -33,16 +37,16 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 char opponent = rounds[round].opponent, counter = rounds[round].counter;
 
                 // win
-                if (wins[opponent] == counter)
-                    rounds[round].outcome = scores[counter] + 6;
+                if (_wins[opponent] == counter)
+                    rounds[round].outcome = _scores[counter] + 6;
 
                 // draw
-                if (opponent == conversions[counter])
-                    rounds[round].outcome = scores[counter] + 3;
+                if (opponent == _draws[counter])
+                    rounds[round].outcome = _scores[counter] + 3;
 
                 // loose
-                if (looses[opponent] == counter)
-                    rounds[round].outcome = scores[counter] + 0;
+                if (_looses[opponent] == counter)
+                    rounds[round].outcome = _scores[counter] + 0;
             }
 
             var points = rounds.Sum(round => round.outcome);
@@ -53,6 +57,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
+            var rounds = _puzzle.ToEnumerable<(char opponent, char counter, int outcome)>((round) => (round[0], round[2], 0)).ToArray();
+
             Assert.Pass();
         }
     }
