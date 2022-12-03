@@ -34,3 +34,7 @@ Make sure to [support](https://adventofcode.com/support) Eric!
 '---' '---' '---' '---' '---' '---' '---' '---'
 ```
 <sup>*Source: [Art by Joan Stark](https://www.asciiart.eu/holiday-and-events/christmas/santa-claus)*</sup>
+
+# 🗄️ Local Archives
+
+[The Great Filter Report](https://gist.github.com/lyellick/a1e6beab6d98a9e9bee354f815103b25) by *anonymous*
