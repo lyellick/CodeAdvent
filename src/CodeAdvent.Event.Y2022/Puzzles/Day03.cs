@@ -30,6 +30,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
+            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack).ToArray().GenerateSplits(3).ToArray();
+
+            //var intersects = rucksacks.Select(groups => groups.Skip(1).Aggregate(new HashSet<char[]>(groups.First().ToArray()), (prev, next) => { prev.IntersectWith(next); return prev; }));
+
             Assert.Pass();
         }
     }
