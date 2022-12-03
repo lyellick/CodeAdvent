@@ -62,5 +62,11 @@
             source.Select((item, index) => new { Index = index, Value = item })
                   .GroupBy(item => item.Index / size)
                   .Select(group => group.Select(item => item.Value).ToArray());
+
+        public static IEnumerable<IList<T>> Split<T>(this T[] array, int size)
+        {
+            for (var i = 0; i < (float)array.Length / size; i++)
+                yield return array.Skip(i * size).Take(size).ToArray();
+        }
     }
 }

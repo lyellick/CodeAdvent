@@ -1,6 +1,7 @@
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
+    /// Day 3: Rucksack Reorganization
     /// </summary>
     public class Day03
     {
@@ -17,7 +18,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            Assert.Pass();
+            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack.ToArray().Split(rucksack.Length / 2).ToArray()).ToArray();
+
+            var intersects = rucksacks.Select(rucksack => rucksack[0].Intersect(rucksack[1]).First()).ToArray();
+
+            var sum = intersects.Select(intersect => char.IsUpper(intersect) ? intersect - 38 : intersect - 96).Sum();
+
+            Assert.That(sum, Is.EqualTo(7766));
         }
 
         [Test]
