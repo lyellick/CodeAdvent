@@ -30,11 +30,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack).ToArray().GenerateSplits(3).ToArray();
+            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack).ToArray().GenerateSplits(3).Select(group => group.Select(rucksack => rucksack.ToArray()).ToArray()).ToArray();
 
-            //var intersects = rucksacks.Select(groups => groups.Skip(1).Aggregate(new HashSet<char[]>(groups.First().ToArray()), (prev, next) => { prev.IntersectWith(next); return prev; }));
+            var intersects = rucksacks.Select(groups => groups.Skip(1).Aggregate(new HashSet<char>(groups.First()), (prev, next) => { prev.IntersectWith(next); return prev; }).First()).ToArray();
 
-            Assert.Pass();
+            var sum = intersects.Select(intersect => char.IsUpper(intersect) ? intersect - 38 : intersect - 96).Sum();
+
+            Assert.That(sum, Is.EqualTo(2415));
         }
     }
 }
