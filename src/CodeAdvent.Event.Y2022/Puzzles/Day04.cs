@@ -25,16 +25,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 (int start, int end) first = (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value));
                 (int start, int end) second = (int.Parse(match.Groups[3].Value), int.Parse(match.Groups[4].Value));
 
-                if (first.start == first.end && second.start != second.end)
-                    return (new int[] { first.start }, Enumerable.Range(second.start, second.end - second.start + 1).ToArray());
-
-                if (first.start != first.end && second.start == second.end)
-                    return (Enumerable.Range(first.start, first.end - first.start + 1).ToArray(), new int[] { second.start });
-
-                return (Enumerable.Range(first.start, first.end - first.start + 1).ToArray(), Enumerable.Range(second.start, second.end - second.start + 1).ToArray());
+                return (Enumerable.Range(first.start, first.end - first.start + 1).ToArray(), 
+                        Enumerable.Range(second.start, second.end - second.start + 1).ToArray());
             }).ToArray();
 
-            var intersects = assignments.Select(assignment => assignment.first.Intersect(assignment.second).Count() == assignment.first.Length || assignment.first.Intersect(assignment.second).Count() == assignment.second.Length);
+            var intersects = assignments.Select(assignment => 
+                    assignment.first.Intersect(assignment.second).Count() == assignment.first.Length ||
+                    assignment.first.Intersect(assignment.second).Count() == assignment.second.Length);
 
             var overlap = intersects.Count(group => group);
 
@@ -49,13 +46,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 (int start, int end) first = (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value));
                 (int start, int end) second = (int.Parse(match.Groups[3].Value), int.Parse(match.Groups[4].Value));
 
-                if (first.start == first.end && second.start != second.end)
-                    return (new int[] { first.start }, Enumerable.Range(second.start, second.end - second.start + 1).ToArray());
-
-                if (first.start != first.end && second.start == second.end)
-                    return (Enumerable.Range(first.start, first.end - first.start + 1).ToArray(), new int[] { second.start });
-
-                return (Enumerable.Range(first.start, first.end - first.start + 1).ToArray(), Enumerable.Range(second.start, second.end - second.start + 1).ToArray());
+                return (Enumerable.Range(first.start, first.end - first.start + 1).ToArray(), 
+                        Enumerable.Range(second.start, second.end - second.start + 1).ToArray());
             }).ToArray();
 
             var intersects = assignments.Select(assignment => assignment.first.Intersect(assignment.second).ToArray()).ToArray();
