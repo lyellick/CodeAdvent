@@ -22,25 +22,25 @@ namespace CodeAdvent.Common.Extensions
 
         }
 
-        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<Match, T> action)
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<Match, T> match)
         {
             Regex find = new(pattern);
 
             using var reader = new StringReader(codeAdventEvent.Input);
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                yield return action(find.Match(line));
+                yield return match(find.Match(line));
 
         }
 
-        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<MatchCollection, T> action)
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<MatchCollection, T> matches)
         {
             Regex find = new(pattern);
 
             using var reader = new StringReader(codeAdventEvent.Input);
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                    yield return action(find.Matches(line));
+                    yield return matches(find.Matches(line));
         }
     }
 }
