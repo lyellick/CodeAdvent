@@ -20,7 +20,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             _stacks = _puzzle.ToEnumerable(
                 @"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})",
-                (match) => match.Groups.Values.Select(val => val.Value).Skip(1).ToList())
+                (match) => match.Groups.Values.Select(val => val.Value.Replace("[", "").Replace("]", "")).Skip(1).ToList())
                 .Take(8).ToList().Pivot();
 
             _instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(
@@ -46,7 +46,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     _stacks[to - 1] = _stacks[to - 1].Prepend(item).ToList();
             }
 
-            var top = string.Join("", _stacks.Select(col => col.First().Replace("[", "").Replace("]", "")));
+            var top = string.Join("", _stacks.Select(col => col.First()));
 
             Assert.That(top, Is.EqualTo("MQTPGLLDN"));
         }
@@ -64,7 +64,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     _stacks[to - 1] = _stacks[to - 1].Prepend(item).ToList();
             }
 
-            var top = string.Join("", _stacks.Select(col => col.First().Replace("[", "").Replace("]", "")));
+            var top = string.Join("", _stacks.Select(col => col.First()));
 
             Assert.That(top, Is.EqualTo("LVZPSTTCZ"));
         }
