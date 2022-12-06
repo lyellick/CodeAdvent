@@ -1,6 +1,4 @@
-using CodeAdvent.Common.Extensions;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
@@ -11,19 +9,21 @@ namespace CodeAdvent.Event.Y2022.Puzzles
     {  
         private CodeAdventPuzzle _puzzle;
 
-        private string[][] _stacks;
+        private List<List<string>> _stacks = new();
 
-        private (int stack, int from, int to)[] _instructions;
+        private (int take, int from, int to)[] _instructions;
 
         [SetUp]
         public async Task Setup()
         {
             _puzzle = await CodeAdventData.GetPuzzle(2022, 5);
 
-            _stacks = _puzzle.ToEnumerable(
+            var raw = _puzzle.ToEnumerable(
                 @"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})",
-                (match) => match.Groups.Values.Select(val => val.Value).Skip(1).ToArray())
-                .Take(8).ToArray();
+                (match) => match.Groups.Values.Select(val => val.Value).Skip(1).ToList())
+                .Take(8).ToList();
+
+            _stacks = raw.Pivot();
 
             _instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(
                 @"move (.*) from (.*) to (.*)",
@@ -38,9 +38,19 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
+            foreach (var (take, from, to) in _instructions)
+            {
+                var collection = _stacks[from - 1].Take(take).ToArray();
 
+                _stacks[from - 1] = _stacks[from - 1].Skip(take).ToList();
 
-            Assert.Pass();
+                foreach (var item in collection)
+                    _stacks[to - 1] = _stacks[to - 1].Prepend(item).ToList();
+            }
+
+            var top = string.Join("", _stacks.Select(col => col.First().Replace("[", "").Replace("]", "")));
+
+            Assert.That(top, Is.EqualTo("MQTPGLLDN"));
         }
 
         [Test]
