@@ -34,13 +34,15 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            var buffer = _puzzle.Input.ToArray().SlidingSplit(14);
+            int size = 14;
 
-            var markers = buffer.Where((split, i) => split.ToHashSet().Count == 14).ToArray();
+            var buffer = _puzzle.Input.ToArray().SlidingSplit(size);
 
-            var processed = _puzzle.Input.Split(string.Join("", markers[0]))[0].Length + 14;
+            var markers = buffer.Where((split, i) => split.ToHashSet().Count == size).ToArray();
 
-            Assert.Pass();
+            var processed = _puzzle.Input.Split(string.Join("", markers[0]))[0].Length + size;
+
+            Assert.That(processed, Is.EqualTo(3559));
         }
     }
 }
