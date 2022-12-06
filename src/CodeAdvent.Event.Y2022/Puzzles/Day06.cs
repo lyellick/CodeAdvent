@@ -1,3 +1,5 @@
+using System.Diagnostics.Metrics;
+
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -18,7 +20,15 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            Assert.Pass();
+            var buffer = _puzzle.Input.ToArray();
+
+            var splits = buffer.Select((c, i) => i < buffer.Length - 3 ? new char[] { c, buffer[i + 1], buffer[i + 2], buffer[i + 3] } : Array.Empty<char>()).ToArray();
+
+            var markers = splits.Where((split, i) => split.ToHashSet().Count == 4).ToArray();
+
+            var processed = _puzzle.Input.Split(string.Join("", markers[0]))[0].Length + 4;
+
+            Assert.That(processed, Is.EqualTo(1702));
         }
 
         [Test]
