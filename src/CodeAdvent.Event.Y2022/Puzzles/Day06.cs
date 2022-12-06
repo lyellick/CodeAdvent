@@ -22,7 +22,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             int size = 4;
 
-            var buffer = _puzzle.Input.ToArray().SlidingSplit(size);
+            var buffer = _puzzle.Input.ToArray().ToSlidingSplit(size);
 
             var markers = buffer.Where((split, i) => split.ToHashSet().Count == size).ToArray();
 
@@ -36,7 +36,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             int size = 14;
 
-            var buffer = _puzzle.Input.ToArray().SlidingSplit(size);
+            var buffer = _puzzle.Input.ToArray().ToSlidingSplit(size);
 
             var markers = buffer.Where((split, i) => split.ToHashSet().Count == size).ToArray();
 

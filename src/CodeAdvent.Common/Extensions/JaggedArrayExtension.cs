@@ -2,7 +2,7 @@
 {
     public static class JaggedArrayExtension
     {
-        public static List<List<T>> Pivot<T>(this List<List<T>> jarray)
+        public static List<List<T>> ToPivot<T>(this List<List<T>> jarray)
         {
             var output = new List<List<T>>();
             for (int col = 0; col < jarray[0].Count; col++)

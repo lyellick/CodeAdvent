@@ -21,7 +21,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             _stacks = _puzzle.ToEnumerable(
                 @"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})",
                 (match) => match.Groups.Values.Select(val => val.Value.Replace("[", "").Replace("]", "")).Skip(1).ToList())
-                .Take(8).ToList().Pivot();
+                .Take(8).ToList().ToPivot();
 
             _instructions = _puzzle.ToEnumerable<(int take, int from, int to)>(
                 @"move (.*) from (.*) to (.*)",

@@ -58,18 +58,18 @@
         /// <param name="source"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        public static IEnumerable<IList<T>> GenerateSplits<T>(this IList<T> source, int size) =>
+        public static IEnumerable<IList<T>> ToSplits<T>(this IList<T> source, int size) =>
             source.Select((item, index) => new { Index = index, Value = item })
                   .GroupBy(item => item.Index / size)
                   .Select(group => group.Select(item => item.Value).ToArray());
 
-        public static IEnumerable<IList<T>> Split<T>(this T[] array, int size)
+        public static IEnumerable<IList<T>> ToSplit<T>(this T[] array, int size)
         {
             for (var i = 0; i < (float)array.Length / size; i++)
                 yield return array.Skip(i * size).Take(size).ToArray();
         }
 
-        public static T[][] SlidingSplit<T>(this IList<T> source, int size)
+        public static T[][] ToSlidingSplit<T>(this IList<T> source, int size)
         {
             List<T[]> container = new();
 

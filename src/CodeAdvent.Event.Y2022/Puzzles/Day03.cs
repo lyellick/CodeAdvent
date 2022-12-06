@@ -18,7 +18,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack.ToArray().Split(rucksack.Length / 2).ToArray()).ToArray();
+            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack.ToArray().ToSplit(rucksack.Length / 2).ToArray()).ToArray();
 
             var intersects = rucksacks.Select(rucksack => rucksack[0].Intersect(rucksack[1]).First()).ToArray();
 
@@ -30,7 +30,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack).ToArray().GenerateSplits(3).Select(group => group.Select(rucksack => rucksack.ToArray()).ToArray()).ToArray();
+            var rucksacks = _puzzle.ToEnumerable((rucksack) => rucksack).ToArray().ToSplits(3).Select(group => group.Select(rucksack => rucksack.ToArray()).ToArray()).ToArray();
 
             var intersects = rucksacks.Select(groups => groups.Skip(1).Aggregate(new HashSet<char>(groups.First()), (prev, next) => { prev.IntersectWith(next); return prev; }).First()).ToArray();
 
