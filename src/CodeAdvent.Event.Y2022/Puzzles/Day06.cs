@@ -20,13 +20,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            var buffer = _puzzle.Input.ToArray();
+            int size = 4;
 
-            var splits = buffer.Select((c, i) => i < buffer.Length - 3 ? new char[] { c, buffer[i + 1], buffer[i + 2], buffer[i + 3] } : Array.Empty<char>()).ToArray();
+            var buffer = _puzzle.Input.ToArray().SlidingSplit(size);
 
-            var markers = splits.Where((split, i) => split.ToHashSet().Count == 4).ToArray();
+            var markers = buffer.Where((split, i) => split.ToHashSet().Count == size).ToArray();
 
-            var processed = _puzzle.Input.Split(string.Join("", markers[0]))[0].Length + 4;
+            var processed = _puzzle.Input.Split(string.Join("", markers[0]))[0].Length + size;
 
             Assert.That(processed, Is.EqualTo(1702));
         }
@@ -34,6 +34,12 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
+            var buffer = _puzzle.Input.ToArray().SlidingSplit(14);
+
+            var markers = buffer.Where((split, i) => split.ToHashSet().Count == 14).ToArray();
+
+            var processed = _puzzle.Input.Split(string.Join("", markers[0]))[0].Length + 14;
+
             Assert.Pass();
         }
     }
