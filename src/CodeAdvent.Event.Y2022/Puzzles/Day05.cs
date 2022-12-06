@@ -54,7 +54,19 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            foreach (var (take, from, to) in _instructions)
+            {
+                var collection = _stacks[from - 1].Take(take).ToArray();
+
+                _stacks[from - 1] = _stacks[from - 1].Skip(take).ToList();
+
+                foreach (var item in collection.Reverse())
+                    _stacks[to - 1] = _stacks[to - 1].Prepend(item).ToList();
+            }
+
+            var top = string.Join("", _stacks.Select(col => col.First().Replace("[", "").Replace("]", "")));
+
+            Assert.That(top, Is.EqualTo("LVZPSTTCZ"));
         }
     }
 }
