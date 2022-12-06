@@ -33,6 +33,17 @@ namespace CodeAdvent.Common.Extensions
 
         }
 
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<Match,bool,T> match)
+        {
+            Regex find = new(pattern);
+
+            using var reader = new StringReader(codeAdventEvent.Input);
+
+            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+                yield return match(find.Match(line), find.IsMatch(line));
+
+        }
+
         public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string pattern, Func<MatchCollection, T> matches)
         {
             Regex find = new(pattern);

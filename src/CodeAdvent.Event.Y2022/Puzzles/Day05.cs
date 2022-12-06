@@ -1,4 +1,5 @@
 using CodeAdvent.Common.Extensions;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace CodeAdvent.Event.Y2022.Puzzles
@@ -21,14 +22,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            var stackes = _puzzle.ToEnumerable<string[]>(@"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})", match: (match) => Array.Empty<string>());
+            var stacks = _puzzle.ToEnumerable(
+                @"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})", 
+                (match) => match.Groups.Values.Select(val => val.Value).Skip(1).ToArray()).Take(8).ToArray();
 
-            var instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(@"move (\d+) from (\d+) to (\d+)", (match) => 
-            {
-                return match.Groups.Count > 1 
-                    ? (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), int.Parse(match.Groups[3].Value)) 
-                    : (0, 0, 0);
-            }).Skip(10).ToArray();
+            var instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(
+                @"move (.*) from (.*) to (.*)",
+                (match, isMatch) => isMatch ?  (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), int.Parse(match.Groups[2].Value)) : (0,0,0)).ToArray();
 
             Assert.Pass();
         }
