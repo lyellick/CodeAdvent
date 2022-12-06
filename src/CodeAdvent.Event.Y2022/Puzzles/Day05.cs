@@ -11,10 +11,26 @@ namespace CodeAdvent.Event.Y2022.Puzzles
     {  
         private CodeAdventPuzzle _puzzle;
 
+        private string[][] _stacks;
+
+        private (int stack, int from, int to)[] _instructions;
+
         [SetUp]
         public async Task Setup()
         {
             _puzzle = await CodeAdventData.GetPuzzle(2022, 5);
+
+            _stacks = _puzzle.ToEnumerable(
+                @"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})",
+                (match) => match.Groups.Values.Select(val => val.Value).Skip(1).ToArray())
+                .Take(8).ToArray();
+
+            _instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(
+                @"move (.*) from (.*) to (.*)",
+                (match, isMatch) => isMatch
+                    ? (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), int.Parse(match.Groups[3].Value))
+                    : (0, 0, 0))
+                .Skip(10).ToArray();
 
             Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
         }
@@ -22,17 +38,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            var stacks = _puzzle.ToEnumerable(
-                @"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})", 
-                (match) => match.Groups.Values.Select(val => val.Value).Skip(1).ToArray())
-                .Take(8).ToArray();
 
-            var instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(
-                @"move (.*) from (.*) to (.*)",
-                (match, isMatch) => isMatch 
-                    ? (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), int.Parse(match.Groups[3].Value)) 
-                    : (0, 0, 0))
-                .Skip(10).ToArray();
 
             Assert.Pass();
         }
