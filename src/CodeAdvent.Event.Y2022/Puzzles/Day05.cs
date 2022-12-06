@@ -23,7 +23,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 (match) => match.Groups.Values.Select(val => val.Value.Replace("[", "").Replace("]", "")).Skip(1).ToList())
                 .Take(8).ToList().Pivot();
 
-            _instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(
+            _instructions = _puzzle.ToEnumerable<(int take, int from, int to)>(
                 @"move (.*) from (.*) to (.*)",
                 (match, isMatch) => isMatch
                     ? (int.Parse(match.Groups[1].Value), int.Parse(match.Groups[2].Value), int.Parse(match.Groups[3].Value))
