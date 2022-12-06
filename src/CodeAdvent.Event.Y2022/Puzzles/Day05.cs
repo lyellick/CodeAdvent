@@ -18,12 +18,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             _puzzle = await CodeAdventData.GetPuzzle(2022, 5);
 
-            var raw = _puzzle.ToEnumerable(
+            _stacks = _puzzle.ToEnumerable(
                 @"(.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3}) (.{3})",
                 (match) => match.Groups.Values.Select(val => val.Value).Skip(1).ToList())
-                .Take(8).ToList();
-
-            _stacks = raw.Pivot();
+                .Take(8).ToList().Pivot();
 
             _instructions = _puzzle.ToEnumerable<(int stack, int from, int to)>(
                 @"move (.*) from (.*) to (.*)",
