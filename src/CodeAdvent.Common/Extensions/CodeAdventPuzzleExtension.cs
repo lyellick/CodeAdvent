@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace CodeAdvent.Common.Extensions
 {
-    public static class CodeAdventDataExtension
+    public static class CodeAdventPuzzleExtension
     {
         public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent)
         {
