@@ -58,16 +58,6 @@ namespace CodeAdvent.Common
                 codeAdventEvent = new() { Year = year, Day = day, Input = input };
             }
 
-            using HttpClient puzzlePageClient = new();
-
-            string puzzlePage = await puzzlePageClient.GetStringAsync(puzzlePageUri);
-
-            if (!string.IsNullOrEmpty(puzzlePage))
-            {
-                var match = pattern.Match(puzzlePage);
-                codeAdventEvent.Title = match.Groups[1].Value;
-            }
-
             return codeAdventEvent;
         }
 
