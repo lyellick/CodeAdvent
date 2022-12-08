@@ -25,9 +25,9 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             VirtualDirectory vdir = new VirtualDirectory("/").MapHistory(history);
 
-            var candidates = vdir.Root.Crawl().Where(candidate => candidate.size <= 100000);
+            var directories = vdir.Root.Crawl().Where(dir => dir.size <= 100000);
 
-            int sum = candidates.Sum(candidate => candidate.size);
+            int sum = directories.Sum(dir => dir.size);
 
             Assert.That(sum, Is.EqualTo(1642503));
         }
@@ -41,11 +41,11 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             var target = 70000000 - 30000000;
 
-            var candidates = vdir.Root.Crawl().OrderBy(dir => dir.size);
+            var directories = vdir.Root.Crawl().OrderBy(dir => dir.size);
 
             var remove = vdir.Root.GetNodeSize() - target;
 
-            var size = candidates.First(dir => dir.size >= remove).size;
+            var size = directories.First(dir => dir.size >= remove).size;
 
             Assert.That(size, Is.EqualTo(6999588));
         }
