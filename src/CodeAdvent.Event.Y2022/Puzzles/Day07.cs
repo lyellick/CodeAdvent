@@ -1,6 +1,7 @@
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
+    /// Day 7: No Space Left On Device
     /// </summary>
     public class Day07
     {
