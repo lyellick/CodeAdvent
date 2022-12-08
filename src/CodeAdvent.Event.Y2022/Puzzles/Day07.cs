@@ -44,8 +44,6 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 }
             } while (index < history.Length);
 
-            string json = JsonConvert.SerializeObject(virdir.Root, new JsonSerializerSettings(){ ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
-
             Assert.Pass();
         }
 

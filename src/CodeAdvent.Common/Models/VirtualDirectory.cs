@@ -26,25 +26,6 @@ namespace CodeAdvent.Common.Models
             if (exists)
                 Current = Current.Children.First(child => child.Name == name);
         }
-
-        public int GetNodeSize(Node node)
-        {
-            int size = 0;
-
-            if (node.Children.Count > 0)
-            {
-                foreach (var child in Current.Children)
-                {
-                    size += GetNodeSize(child);
-                }
-            }
-            else
-            {
-                size += node.Entities.Sum(entry => entry.Size);
-            }
-
-            return size;
-        }
     }
 
     public class Node

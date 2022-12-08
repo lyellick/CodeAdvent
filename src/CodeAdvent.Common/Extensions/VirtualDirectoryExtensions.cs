@@ -56,5 +56,24 @@ namespace CodeAdvent.Common.Extensions
             } while (process);
             return index;
         }
+
+        public static int GetNodeSize(this Node node)
+        {
+            int size = 0;
+
+            if (node.Children.Count > 0)
+            {
+                foreach (var child in node.Children)
+                {
+                    size += child.GetNodeSize();
+                }
+            }
+            else
+            {
+                size += node.Entities.Sum(entry => entry.Size);
+            }
+
+            return size;
+        }
     }
 }
