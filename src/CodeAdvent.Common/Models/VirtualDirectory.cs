@@ -14,29 +14,48 @@
 
         public void MoveUp()
         {
-            if (!Current.IsRoot)
-                // TODO: Impliment recursive lookup of parent based off the current directory.
-                Current = Find(Root, Current.Parent);
+            Current = Find(Root, Current.Parent);
         }
 
-        public Directory Find(Directory directory, Guid parrent)
+        public void MoveDown(string name)
+        {
+            bool exists = Current.Children.Any(child => child.Name == name);
+
+            if (exists)
+                Current = Current.Children.First(child => child.Name == name);
+        }
+
+        public Directory Find(Directory directory, Guid parent)
         {
             Directory found = null;
 
             do
             {
-                if (directory.Parent == parrent)
-                    found = directory;
-
-                foreach (var child in directory.Children)
+                if (directory.Id == parent)
                 {
-                    if (child.Parent == parrent)
-                        found = child;
-
-                    if (child.Children.Count == 0)
-                        break;
+                    found = directory;
                 }
-            } while (directory == null);
+                else
+                {
+                    if (directory.Children.Count > 0)
+                    {
+                        foreach (var child in directory.Children)
+                        {
+                            if (found != null)
+                                break;
+
+                            if (child.Id == parent)
+                            {
+                                found = child;
+                            }
+                            else
+                            {
+                                found = Find(child, parent);
+                            }
+                        }
+                    }
+                }
+            } while (found == null);
 
             return found;
         }
@@ -66,8 +85,12 @@
             IsRoot = isRoot;
         }
 
-        public void AddDirectory(string name) => Children.Add(new(Parent, name));
+        public void AddDirectory(string name) => Children.Add(new(Id, name));
+
+        public void AddDirectories(string[] names) => Array.ForEach(names, name => Children.Add(new(Id, name)));
 
         public void AddFile(string name, int size) => Files.Add((name, size));
+
+        public void AddFiles((string name, int size)[] files) => Files.AddRange(files);
     }
 }

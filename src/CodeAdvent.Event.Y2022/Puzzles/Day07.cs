@@ -18,14 +18,59 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            VirtualDirectory root = new("/");
+            VirtualDirectory virdir = new("/");
 
-            var history = _puzzle.ToEnumerable((line) => line.Split(" ")).ToArray();
+            var history = _puzzle.ToEnumerable((line) => line.Split(" ")).Skip(1).ToArray();
+            
+            int index = 0;
 
-            for (int i = 0; i < history.Length; i++)
+            do
             {
+                var line = history[index];
 
-            }
+                if (line.Contains("$"))
+                {
+                    switch (line[1])
+                    {
+                        case "cd":
+                            switch (line[2])
+                            {
+                                case "..":
+                                    virdir.MoveUp();
+                                    break;
+                                default:
+                                    virdir.MoveDown(line[2]);
+                                    break;
+                            }
+                            index++;
+                            break;
+                        case "ls":
+                            index++;
+
+                            do
+                            {
+                                var entity = history[index];
+
+                                bool isDir = entity.Contains("dir");
+
+                                if (isDir)
+                                {
+                                    virdir.Current.AddDirectory(entity[1]);
+                                }
+                                else
+                                {
+                                    string name = entity[1];
+                                    bool canParse = int.TryParse(entity[0], out int size);
+
+                                    virdir.Current.AddFile(name, size);
+                                }
+
+                                index++;
+                            } while (!history[index].Contains("$"));
+                            break;
+                    }
+                }
+            } while (index < history.Length);
 
             Assert.Pass();
         }
