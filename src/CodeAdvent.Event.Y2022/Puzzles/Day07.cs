@@ -38,7 +38,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                             index = virdir.ChangeDirectory(index, line[2]);
                             break;
                         case "ls":
-                            index = virdir.ListDirectory(history, index);
+                            index = virdir.Current.ListDirectory(history, index);
                             break;
                     }
                 }

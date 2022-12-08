@@ -19,7 +19,7 @@ namespace CodeAdvent.Common.Extensions
             return index;
         }
 
-        public static int ListDirectory(this VirtualDirectory virdir, string[][] history, int index)
+        public static int ListDirectory(this Node node, string[][] history, int index)
         {
             bool process = true;
 
@@ -33,14 +33,14 @@ namespace CodeAdvent.Common.Extensions
 
                 if (isDir)
                 {
-                    virdir.Current.AddNode(entity[1]);
+                    node.AddNode(entity[1]);
                 }
                 else
                 {
                     string name = entity[1];
                     bool canParse = int.TryParse(entity[0], out int size);
 
-                    virdir.Current.AddEntity(name, size);
+                    node.AddEntity(name, size);
                 }
 
                 index++;
@@ -54,6 +54,7 @@ namespace CodeAdvent.Common.Extensions
                     process = false;
                 }
             } while (process);
+
             return index;
         }
 
