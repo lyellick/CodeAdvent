@@ -35,51 +35,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     switch (line[1])
                     {
                         case "cd":
-                            switch (line[2])
-                            {
-                                case "..":
-                                    virdir.MoveUp();
-                                    break;
-                                default:
-                                    virdir.MoveDown(line[2]);
-                                    break;
-                            }
-                            index++;
+                            index = virdir.ChangeDirectory(index, line[2]);
                             break;
                         case "ls":
-                            bool process = true;
-
-                            index++;
-
-                            do
-                            {
-                                var entity = history[index];
-
-                                bool isDir = entity.Contains("dir");
-
-                                if (isDir)
-                                {
-                                    virdir.Current.AddNode(entity[1]);
-                                }
-                                else
-                                {
-                                    string name = entity[1];
-                                    bool canParse = int.TryParse(entity[0], out int size);
-
-                                    virdir.Current.AddEntity(name, size);
-                                }
-                                
-                                index++;
-
-                                if (index < history.Length)
-                                {
-                                    process = !history[index].Contains("$");
-                                }
-                                else
-                                {
-                                    process = false;
-                                }
-                            } while (process);
+                            index = virdir.ListDirectory(history, index);
                             break;
                     }
                 }
