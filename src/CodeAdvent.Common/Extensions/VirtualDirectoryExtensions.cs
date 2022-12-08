@@ -60,21 +60,30 @@ namespace CodeAdvent.Common.Extensions
 
         public static int GetNodeSize(this Node node)
         {
-            int size = 0;
+            int size = node.Entities.Sum(entry => entry.Size);
 
-            if (node.Children.Count > 0)
-            {
-                foreach (var child in node.Children)
-                {
-                    size += child.GetNodeSize();
-                }
-            }
-            else
-            {
-                size += node.Entities.Sum(entry => entry.Size);
-            }
+            foreach (var child in node.Children)
+                size += child.GetNodeSize();
 
             return size;
+        }
+
+        public static IEnumerable<(string directory, int size)> Crawl(this Node node)
+        {
+            List<(string directory, int size)> candidates = new();
+
+            int size = node.GetNodeSize();
+
+            candidates.Add((node.Name, size));
+
+            foreach (var child in node.Children)
+            {
+                var found = child.Crawl();
+
+                candidates.AddRange(found);
+            }
+
+            return candidates;
         }
     }
 }

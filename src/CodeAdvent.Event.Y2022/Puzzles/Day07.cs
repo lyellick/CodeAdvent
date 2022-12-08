@@ -20,7 +20,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            VirtualDirectory virdir = new("/");
+            VirtualDirectory vdir = new("/");
 
             var history = _puzzle.ToEnumerable((line) => line.Split(" ")).Skip(1).ToArray();
             
@@ -35,16 +35,21 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     switch (line[1])
                     {
                         case "cd":
-                            index = virdir.ChangeDirectory(index, line[2]);
+                            index = vdir.ChangeDirectory(index, line[2]);
                             break;
                         case "ls":
-                            index = virdir.Current.ListDirectory(history, index);
+                            index = vdir.Current.ListDirectory(history, index);
                             break;
                     }
                 }
+
             } while (index < history.Length);
 
-            Assert.Pass();
+            var candidates = vdir.Root.Crawl().Where(candidate => candidate.size <= 100000);
+
+            int sum = candidates.Sum(candidate => candidate.size);
+
+            Assert.That(sum, Is.EqualTo(1642503));
         }
 
         [Test]
