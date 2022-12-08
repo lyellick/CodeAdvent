@@ -1,3 +1,4 @@
+using CodeAdvent.Common.Extensions;
 using Newtonsoft.Json;
 
 namespace CodeAdvent.Event.Y2022.Puzzles
@@ -20,30 +21,9 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            VirtualDirectory vdir = new("/");
-
             var history = _puzzle.ToEnumerable((line) => line.Split(" ")).Skip(1).ToArray();
-            
-            int index = 0;
 
-            do
-            {
-                var line = history[index];
-
-                if (line.Contains("$"))
-                {
-                    switch (line[1])
-                    {
-                        case "cd":
-                            index = vdir.ChangeDirectory(index, line[2]);
-                            break;
-                        case "ls":
-                            index = vdir.Current.ListDirectory(history, index);
-                            break;
-                    }
-                }
-
-            } while (index < history.Length);
+            VirtualDirectory vdir = new VirtualDirectory("/").MapHistory(history);
 
             var candidates = vdir.Root.Crawl().Where(candidate => candidate.size <= 100000);
 
@@ -55,7 +35,19 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var history = _puzzle.ToEnumerable((line) => line.Split(" ")).Skip(1).ToArray();
+
+            VirtualDirectory vdir = new VirtualDirectory("/").MapHistory(history);
+
+            var target = 70000000 - 30000000;
+
+            var candidates = vdir.Root.Crawl().OrderBy(dir => dir.size);
+
+            var remove = vdir.Root.GetNodeSize() - target;
+
+            var size = candidates.First(dir => dir.size >= remove).size;
+
+            Assert.That(size, Is.EqualTo(6999588));
         }
     }
 }

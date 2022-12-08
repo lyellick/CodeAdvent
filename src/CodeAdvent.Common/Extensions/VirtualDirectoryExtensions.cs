@@ -4,6 +4,32 @@ namespace CodeAdvent.Common.Extensions
 {
     public static class VirtualDirectoryExtensions
     {
+        public static VirtualDirectory MapHistory(this VirtualDirectory vdir, string[][] history)
+        {
+            int index = 0;
+
+            do
+            {
+                var line = history[index];
+
+                if (line.Contains("$"))
+                {
+                    switch (line[1])
+                    {
+                        case "cd":
+                            index = vdir.ChangeDirectory(index, line[2]);
+                            break;
+                        case "ls":
+                            index = vdir.Current.ListDirectory(history, index);
+                            break;
+                    }
+                }
+
+            } while (index < history.Length);
+
+            return vdir;
+        }
+
         public static int ChangeDirectory(this VirtualDirectory virdir, int index, string name)
         {
             switch (name)
