@@ -17,5 +17,21 @@
 
             return output;
         }
+
+        public static T[][] ToPivot<T>(this T[][] jarray)
+        {
+            var output = new List<T[]>();
+            for (int col = 0; col < jarray[0].Length; col++)
+                if (typeof(T) == typeof(string))
+                {
+                    output.Add(Enumerable.Range(0, jarray.Length).Select(i => jarray[i][col]).Where(container => !string.IsNullOrWhiteSpace(container.ToString())).ToArray());
+                }
+                else
+                {
+                    output.Add(Enumerable.Range(0, jarray.Length).Select(i => jarray[i][col]).ToArray());
+                }
+
+            return output.ToArray();
+        }
     }
 }
