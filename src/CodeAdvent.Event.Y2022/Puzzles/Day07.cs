@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -57,14 +59,14 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
                                 if (isDir)
                                 {
-                                    virdir.Current.AddDirectory(entity[1]);
+                                    virdir.Current.AddNode(entity[1]);
                                 }
                                 else
                                 {
                                     string name = entity[1];
                                     bool canParse = int.TryParse(entity[0], out int size);
 
-                                    virdir.Current.AddFile(name, size);
+                                    virdir.Current.AddEntity(name, size);
                                 }
                                 
                                 index++;
@@ -82,6 +84,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     }
                 }
             } while (index < history.Length);
+
+            string json = JsonConvert.SerializeObject(virdir.Root, new JsonSerializerSettings(){ ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
 
             Assert.Pass();
         }
