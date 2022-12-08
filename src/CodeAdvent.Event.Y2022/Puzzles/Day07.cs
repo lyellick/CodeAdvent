@@ -45,6 +45,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                             index++;
                             break;
                         case "ls":
+                            bool process = true;
+
                             index++;
 
                             do
@@ -64,9 +66,18 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
                                     virdir.Current.AddFile(name, size);
                                 }
-
+                                
                                 index++;
-                            } while (!history[index].Contains("$"));
+
+                                if (index < history.Length)
+                                {
+                                    process = !history[index].Contains("$");
+                                }
+                                else
+                                {
+                                    process = false;
+                                }
+                            } while (process);
                             break;
                     }
                 }
