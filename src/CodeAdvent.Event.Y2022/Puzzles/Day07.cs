@@ -18,6 +18,15 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
+            VirtualDirectory root = new("/");
+
+            var history = _puzzle.ToEnumerable((line) => line.Split(" ")).ToArray();
+
+            for (int i = 0; i < history.Length; i++)
+            {
+
+            }
+
             Assert.Pass();
         }
 
