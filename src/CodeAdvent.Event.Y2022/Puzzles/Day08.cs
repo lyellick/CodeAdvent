@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -23,7 +25,6 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             var seen = 0;
 
             for (int row = 0; row < forest.Length; row++)
-            {
                 for (int col = 0; col < forest[0].Length; col++)
                 {
                     var tree = forest[row][col];
@@ -36,7 +37,6 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     if (vtb || vbt || hlr || hrl)
                         seen++;
                 }
-            }
 
             Assert.That(seen, Is.EqualTo(1679));
         }
@@ -44,7 +44,39 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var forest = _puzzle.ToEnumerable((row) => row.Select(c => c - '0').ToArray()).ToArray();
+
+            var optimal = 0;
+
+            for (int row = 0; row < forest.Length; row++)
+            {
+                forest[row][0] = 10;
+                forest[row][forest[row].Length - 1] = 10;
+            }
+
+            for (int col = 0; col < forest[0].Length; col++)
+            {
+                forest[0][col] = 10;
+                forest[forest.Length - 1][col] = 10;
+            }
+
+            for (int row = 1; row < forest.Length - 1; row++)
+                for (int col = 1; col < forest[0].Length - 1; col++)
+                {
+                    var target = forest[row][col];
+
+                    var vtb = Enumerable.Range(0, row).Reverse().Select(r => forest[r][col]).TakeWhile(tree => tree < target).Count() + 1;
+                    var vbt = Enumerable.Range(row + 1, forest.Length - row - 1).Select(r => forest[r][col]).TakeWhile(tree => tree < target).Count() + 1;
+                    var hlr = Enumerable.Range(0, col).Reverse().Select(c => forest[row][c]).TakeWhile(tree => tree < target).Count() + 1;
+                    var hrl = Enumerable.Range(col + 1, forest[0].Length - col - 1).Select(c => forest[row][c]).TakeWhile(tree => tree < target).Count() + 1;
+
+                    var score = vtb * vbt * hlr * hrl;
+
+                    if (score > optimal)
+                        optimal = score;
+                }
+
+            Assert.That(optimal, Is.EqualTo(536625));
         }
     }
 }
