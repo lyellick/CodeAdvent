@@ -2,12 +2,12 @@
 {
     public static class JaggedArrayUtil
     {
-        public static T CreateJaggedArray<T>(params int[] lengths)
+        public static T Create<T>(params int[] lengths)
         {
-            return (T)InitializeJaggedArray(typeof(T).GetElementType(), 0, lengths);
+            return (T)Initialize(typeof(T).GetElementType(), 0, lengths);
         }
 
-        public static object InitializeJaggedArray(Type type, int index, int[] lengths)
+        public static object Initialize(Type type, int index, int[] lengths)
         {
             Array array = Array.CreateInstance(type, lengths[index]);
             Type elementType = type.GetElementType();
@@ -17,7 +17,7 @@
                 for (int i = 0; i < lengths[index]; i++)
                 {
                     array.SetValue(
-                        InitializeJaggedArray(elementType, index + 1, lengths), i);
+                        Initialize(elementType, index + 1, lengths), i);
                 }
             }
 
