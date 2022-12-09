@@ -101,14 +101,12 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
                     for (int i = 1; i < length.Length; i++)
                     {
-                        Vector2 shift = new();
-
                         Vector2 head = length[i - 1], tail = length[i];
 
                         float rows = head.Y - tail.Y, columns = head.X - tail.X;
 
                         length[i] += (rows <= 1 && rows >= -1 && columns <= 1 && columns >= -1)
-                            ? shift
+                            ? new()
                             : new Vector2(Math.Clamp(head.X - tail.X, -1, 1), Math.Clamp(head.Y - tail.Y, -1, 1));
                     }
 
