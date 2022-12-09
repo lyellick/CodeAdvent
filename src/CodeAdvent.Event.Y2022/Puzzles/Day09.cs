@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -67,7 +69,48 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            var simulation = _puzzle.ToEnumerable<(string direction, int steps)>(@"(.+) (.+)", step => (step.Groups[1].Value, int.Parse(step.Groups[2].Value))).ToArray();
+
+            Vector2[] length = new Vector2[10];
+
+            HashSet<Vector2> path = new() { new Vector2() };
+
+            foreach ((string direction, int steps) in simulation)
+            {
+                var next = new Vector2();
+
+                switch (direction)
+                {
+                    case "U": next = new Vector2(0, 1); break;
+                    case "D": next = new Vector2(0, -1); break;
+                    case "L": next = new Vector2(-1, 0); break;
+                    case "R": next = new Vector2(1, 0); break;
+                }
+
+                for (int i = 0; i < steps; i++)
+                {
+                    length[0] += next;
+
+                    for (int j = 1; j < length.Length; j++)
+                    {
+                        Vector2 shift = new();
+
+                        Vector2 head = length[j - 1], tail = length[j];
+
+                        float columns = head.X - tail.X, rows = head.Y - tail.Y;
+
+                        length[j] += (columns <= 1 && columns >= -1 && rows <= 1 && rows >= -1)
+                            ? shift
+                            : new Vector2(Math.Clamp(head.X - tail.X, -1, 1), Math.Clamp(head.Y - tail.Y, -1, 1));
+                    }
+
+                    path.Add(length[^1]);
+                }
+            }
+
+            var visited = path.Count;
+
+            Assert.That(visited, Is.EqualTo(2487));
         }
     }
 }
