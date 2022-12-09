@@ -20,7 +20,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            var simulation = _puzzle.ToEnumerable<(string direction, int steps)>(@"(.+) (.+)", step => (step.Groups[1].Value, int.Parse(step.Groups[2].Value))).ToArray();
+            var simulation = _puzzle
+                .ToEnumerable<(string direction, int steps)>(
+                    @"(.+) (.+)", step => (step.Groups[1].Value, int.Parse(step.Groups[2].Value)))
+                .ToArray();
 
             List<(int row, int col)> head = new() { (0, 0) }, tail = new() { (0, 0) };
 
@@ -69,7 +72,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            var simulation = _puzzle.ToEnumerable<(string direction, int steps)>(@"(.+) (.+)", step => (step.Groups[1].Value, int.Parse(step.Groups[2].Value))).ToArray();
+            var simulation = _puzzle
+                .ToEnumerable<(string direction, int steps)>(
+                    @"(.+) (.+)", step => (step.Groups[1].Value, int.Parse(step.Groups[2].Value)))
+                .ToArray();
 
             Vector2[] length = new Vector2[10];
 
@@ -87,25 +93,29 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     case "R": next = new Vector2(1, 0); break;
                 }
 
-                for (int i = 0; i < steps; i++)
+                int step = steps;
+
+                do
                 {
                     length[0] += next;
 
-                    for (int j = 1; j < length.Length; j++)
+                    for (int i = 1; i < length.Length; i++)
                     {
                         Vector2 shift = new();
 
-                        Vector2 head = length[j - 1], tail = length[j];
+                        Vector2 head = length[i - 1], tail = length[i];
 
-                        float columns = head.X - tail.X, rows = head.Y - tail.Y;
+                        float rows = head.Y - tail.Y, columns = head.X - tail.X;
 
-                        length[j] += (columns <= 1 && columns >= -1 && rows <= 1 && rows >= -1)
+                        length[i] += (rows <= 1 && rows >= -1 && columns <= 1 && columns >= -1)
                             ? shift
                             : new Vector2(Math.Clamp(head.X - tail.X, -1, 1), Math.Clamp(head.Y - tail.Y, -1, 1));
                     }
 
                     path.Add(length[^1]);
-                }
+
+                    step--;
+                } while (step != 0);
             }
 
             var visited = path.Count;
