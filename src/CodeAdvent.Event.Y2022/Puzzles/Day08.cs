@@ -29,10 +29,17 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 {
                     var tree = forest[row][col];
 
-                    bool vtb = Enumerable.Range(0, row).All(row => forest[row][col] < tree);
-                    bool vbt = Enumerable.Range(row + 1, forest.Length - row - 1).All(row => forest[row][col] < tree);
-                    bool hlr = Enumerable.Range(0, col).All(col => forest[row][col] < tree);
-                    bool hrl = Enumerable.Range(col + 1, forest[0].Length - col - 1).All(col => forest[row][col] < tree);
+                    bool vtb = Enumerable.Range(0, row)
+                        .All(row => forest[row][col] < tree);
+
+                    bool vbt = Enumerable.Range(row + 1, forest.Length - row - 1)
+                        .All(row => forest[row][col] < tree);
+
+                    bool hlr = Enumerable.Range(0, col)
+                        .All(col => forest[row][col] < tree);
+
+                    bool hrl = Enumerable.Range(col + 1, forest[0].Length - col - 1)
+                        .All(col => forest[row][col] < tree);
 
                     if (vtb || vbt || hlr || hrl)
                         seen++;
@@ -59,10 +66,27 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 {
                     var target = forest[row][col];
 
-                    var vtb = Enumerable.Range(0, row).Reverse().Select(r => forest[r][col]).TakeWhile(tree => tree < target).Count() + 1;
-                    var vbt = Enumerable.Range(row + 1, forest.Length - row - 1).Select(r => forest[r][col]).TakeWhile(tree => tree < target).Count() + 1;
-                    var hlr = Enumerable.Range(0, col).Reverse().Select(c => forest[row][c]).TakeWhile(tree => tree < target).Count() + 1;
-                    var hrl = Enumerable.Range(col + 1, forest[0].Length - col - 1).Select(c => forest[row][c]).TakeWhile(tree => tree < target).Count() + 1;
+                    var vtb = Enumerable.Range(0, row)
+                        .Reverse()
+                        .Select(r => forest[r][col])
+                        .TakeWhile(tree => tree < target)
+                        .Count() + 1;
+
+                    var vbt = Enumerable.Range(row + 1, forest.Length - row - 1)
+                        .Select(r => forest[r][col])
+                        .TakeWhile(tree => tree < target)
+                        .Count() + 1;
+
+                    var hlr = Enumerable.Range(0, col)
+                        .Reverse()
+                        .Select(c => forest[row][c])
+                        .TakeWhile(tree => tree < target)
+                        .Count() + 1;
+
+                    var hrl = Enumerable.Range(col + 1, forest[0].Length - col - 1)
+                        .Select(c => forest[row][c])
+                        .TakeWhile(tree => tree < target)
+                        .Count() + 1;
 
                     var scenic = vtb * vbt * hlr * hrl;
 
