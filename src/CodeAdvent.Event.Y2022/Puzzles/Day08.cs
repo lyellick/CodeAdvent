@@ -18,17 +18,11 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            var horizontal = _puzzle.ToEnumerable((row) => row.Select(c => c - '0').ToArray()).ToArray();
+            var forest = _puzzle.ToEnumerable((row) => row.Select(c => c - '0').ToArray()).ToArray();
 
-            var vertical = horizontal.ToPivot();
+            var horizontal = forest;
 
-            for (int row = 0; row < horizontal.Length; row++)
-            {
-                for (int col = 0; col < horizontal[row].Length; col++)
-                {
-
-                }
-            }
+            var vertical = forest.ToPivot();
 
             Assert.Pass();
         }
