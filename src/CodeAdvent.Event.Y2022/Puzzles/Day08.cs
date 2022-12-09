@@ -53,11 +53,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             var forest = _puzzle.ToEnumerable((row) => row.Select(c => c - '0').ToArray()).ToArray();
 
+            var max = forest.Select(grove => grove.Max()).Max() + 1;
+
             for (int row = 0; row < forest.Length; row++)
-                forest[row][0] = forest[row][^1] = 10;
+                forest[row][0] = forest[row][^1] = max;
 
             for (int col = 0; col < forest[0].Length; col++)
-                forest[0][col] = forest[^1][col] = 10;
+                forest[0][col] = forest[^1][col] = max;
 
             var optimal = 0;
 
