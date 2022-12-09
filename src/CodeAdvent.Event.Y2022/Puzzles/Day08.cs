@@ -46,19 +46,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             var forest = _puzzle.ToEnumerable((row) => row.Select(c => c - '0').ToArray()).ToArray();
 
-            var optimal = 0;
-
             for (int row = 0; row < forest.Length; row++)
-            {
-                forest[row][0] = 10;
-                forest[row][forest[row].Length - 1] = 10;
-            }
+                forest[row][0] = forest[row][^1] = 10;
 
             for (int col = 0; col < forest[0].Length; col++)
-            {
-                forest[0][col] = 10;
-                forest[forest.Length - 1][col] = 10;
-            }
+                forest[0][col] = forest[^1][col] = 10;
+
+            var optimal = 0;
 
             for (int row = 1; row < forest.Length - 1; row++)
                 for (int col = 1; col < forest[0].Length - 1; col++)
@@ -70,10 +64,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     var hlr = Enumerable.Range(0, col).Reverse().Select(c => forest[row][c]).TakeWhile(tree => tree < target).Count() + 1;
                     var hrl = Enumerable.Range(col + 1, forest[0].Length - col - 1).Select(c => forest[row][c]).TakeWhile(tree => tree < target).Count() + 1;
 
-                    var score = vtb * vbt * hlr * hrl;
+                    var scenic = vtb * vbt * hlr * hrl;
 
-                    if (score > optimal)
-                        optimal = score;
+                    if (scenic > optimal)
+                        optimal = scenic;
                 }
 
             Assert.That(optimal, Is.EqualTo(536625));
