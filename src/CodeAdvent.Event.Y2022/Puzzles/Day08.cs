@@ -20,11 +20,25 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             var forest = _puzzle.ToEnumerable((row) => row.Select(c => c - '0').ToArray()).ToArray();
 
-            var horizontal = forest;
+            var seen = 0;
 
-            var vertical = forest.ToPivot();
+            for (int row = 0; row < forest.Length; row++)
+            {
+                for (int col = 0; col < forest[0].Length; col++)
+                {
+                    var tree = forest[row][col];
 
-            Assert.Pass();
+                    bool vtb = Enumerable.Range(0, row).All(row => forest[row][col] < tree);
+                    bool vbt = Enumerable.Range(row + 1, forest.Length - row - 1).All(row => forest[row][col] < tree);
+                    bool hlr = Enumerable.Range(0, col).All(col => forest[row][col] < tree);
+                    bool hrl = Enumerable.Range(col + 1, forest[0].Length - col - 1).All(col => forest[row][col] < tree);
+
+                    if (vtb || vbt || hlr || hrl)
+                        seen++;
+                }
+            }
+
+            Assert.That(seen, Is.EqualTo(1679));
         }
 
         [Test]
