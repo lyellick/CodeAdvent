@@ -86,7 +86,7 @@
                 }
             }
 
-            Assert.Pass();
+            Assert.That(signal, Is.EqualTo(10760));
         }
     }
 }
