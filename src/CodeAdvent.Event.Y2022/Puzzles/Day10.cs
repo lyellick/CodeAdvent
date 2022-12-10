@@ -18,7 +18,32 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            Assert.Pass();
+            var program = _puzzle
+                .ToEnumerable<(int cycles, int value)>(
+                    @"(.+) (.+)", (instruction, isMatch) => isMatch ? (2, int.Parse(instruction.Groups[2].Value)) : (1, 0))
+                .ToArray();
+
+            int pass = 0, signal = 0, x = 1;
+
+            foreach (var instruction in program)
+            {
+                pass++;
+
+                if (pass % 40 == 20)
+                    signal += pass * x; 
+
+                if (instruction.cycles == 2)
+                {
+                    pass++;
+
+                    if (pass % 40 == 20)
+                        signal += pass * x;
+
+                    x += instruction.value;
+                }
+            }
+
+            Assert.That(signal, Is.EqualTo(10760));
         }
 
         [Test]
