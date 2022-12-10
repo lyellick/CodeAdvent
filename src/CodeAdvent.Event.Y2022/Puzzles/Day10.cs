@@ -23,12 +23,14 @@
                     @"(.+) (.+)", (instruction, isMatch) => isMatch ? (2, int.Parse(instruction.Groups[2].Value)) : (1, 0))
                 .ToArray();
 
-            int pass = 1, signal = 0, x = 1;
+            int pass = 0, signal = 0, x = 1;
 
             foreach (var (cycles, value) in program)
             {
+                pass++;
+
                 if (pass % 40 == 20)
-                    signal += pass * x; 
+                    signal += pass * x;
 
                 if (cycles == 2)
                 {
@@ -39,8 +41,6 @@
 
                     x += value;
                 }
-
-                pass++;
             }
 
             Assert.That(signal, Is.EqualTo(10760));
@@ -54,19 +54,22 @@
                     @"(.+) (.+)", (instruction, isMatch) => isMatch ? (2, int.Parse(instruction.Groups[2].Value)) : (1, 0))
                 .ToArray();
 
-            string display = "";
+            int pass = 0, signal = 0, x = 1;
 
-            int pass = 1, signal = 0, x = 1;
+            string display = "";
 
             foreach (var (cycles, value) in program)
             {
                 display += Math.Abs((pass % 40) - x) <= 1 ? "▓" : "░";
 
+                pass++;
+
                 if (pass % 40 == 20)
                     signal += pass * x;
-                else if (pass % 40 == 0)
+
+                if (pass % 40 == 0)
                     display += "\n";
-                
+
                 if (cycles == 2)
                 {
                     display += Math.Abs((pass % 40) - x) <= 1 ? "▓" : "░";
@@ -75,16 +78,23 @@
 
                     if (pass % 40 == 20)
                         signal += pass * x;
-                    else if (pass % 40 == 0)
+
+                    if (pass % 40 == 0)
                         display += "\n";
 
                     x += value;
                 }
-
-                pass++;
             }
 
-            Assert.Pass();
+            // Display:
+            //  ▓▓▓▓░▓▓▓░░░▓▓░░▓▓▓░░▓░░▓░▓▓▓▓░░▓▓░░▓░░▓░
+            //  ▓░░░░▓░░▓░▓░░▓░▓░░▓░▓░░▓░▓░░░░▓░░▓░▓░░▓░
+            //  ▓▓▓░░▓░░▓░▓░░░░▓░░▓░▓▓▓▓░▓▓▓░░▓░░░░▓▓▓▓░
+            //  ▓░░░░▓▓▓░░▓░▓▓░▓▓▓░░▓░░▓░▓░░░░▓░▓▓░▓░░▓░
+            //  ▓░░░░▓░░░░▓░░▓░▓░░░░▓░░▓░▓░░░░▓░░▓░▓░░▓░
+            //  ▓░░░░▓░░░░░▓▓▓░▓░░░░▓░░▓░▓░░░░░▓▓▓░▓░░▓░
+
+            Assert.That(signal, Is.EqualTo(10760));
         }
     }
 }
