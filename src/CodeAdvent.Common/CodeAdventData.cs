@@ -19,8 +19,6 @@ namespace CodeAdvent.Common
         {
             CodeAdventPuzzle codeAdventEvent = new();
 
-            Regex pattern = new(@"<h2>--- Day \d: (.*) ---<\/h2>");
-
             if (!TryGetEnvironmentVariable("AOCSession", out string token))
                 throw new Exception("Missing environment variable: AOCSession.");
 
