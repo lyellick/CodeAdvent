@@ -1,7 +1,7 @@
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
-    /// Day 11: Unknown
+    /// Day 11: Monkey in the Middle
     /// </summary>
     public class Day11
     {
