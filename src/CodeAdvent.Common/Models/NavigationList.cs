@@ -15,13 +15,10 @@
             set { _currentIndex = value; }
         }
 
-        public void MoveNext() => _currentIndex++;
+        public void Next() => _currentIndex++;
 
-        public void MovePrevious() => _currentIndex--;
+        public void Previous() => _currentIndex--;
 
-        public T Current
-        {
-            get { return this[CurrentIndex]; }
-        }
+        public T Current => this[CurrentIndex];
     }
 }
