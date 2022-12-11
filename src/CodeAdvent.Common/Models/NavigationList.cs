@@ -4,15 +4,6 @@
     {
         private int _currentIndex = 0;
 
-        public NavigationList()
-        {
-        }
-
-        public NavigationList(IList<T> array)
-        {
-            this.AddRange(array);
-        }
-
         public int CurrentIndex
         {
             get

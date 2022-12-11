@@ -1,4 +1,6 @@
-﻿namespace CodeAdvent.Common.Extensions
+﻿using CodeAdvent.Common.Models;
+
+namespace CodeAdvent.Common.Extensions
 {
     public static class IListExtension
     {
@@ -87,6 +89,15 @@
             }
 
             return container.ToArray();
+        }
+
+        public static NavigationList<T> ToNavigationList<T>(this IList<T> source)
+        {
+            NavigationList<T> output = new();
+            
+            output.AddRange(source);
+
+            return output;
         }
     }
 }
