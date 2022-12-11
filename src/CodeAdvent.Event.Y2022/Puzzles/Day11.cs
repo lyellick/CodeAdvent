@@ -22,7 +22,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             int rounds = 20;
 
-            _puzzle.Input = "Monkey 0:\n  Starting items: 79, 98\n  Operation: new = old * 19\n  Test: divisible by 23\n    If true: throw to monkey 2\n    If false: throw to monkey 3\n\nMonkey 1:\n  Starting items: 54, 65, 75, 74\n  Operation: new = old + 6\n  Test: divisible by 19\n    If true: throw to monkey 2\n    If false: throw to monkey 0\n\nMonkey 2:\n  Starting items: 79, 60, 97\n  Operation: new = old * old\n  Test: divisible by 13\n    If true: throw to monkey 1\n    If false: throw to monkey 3\n\nMonkey 3:\n  Starting items: 74\n  Operation: new = old + 3\n  Test: divisible by 17\n    If true: throw to monkey 0\n    If false: throw to monkey 1";
+            int modifier = 3;
 
             string pattern = @"Monkey (.+):\n\s+Starting items: (.+)\n\s+Operation: new = old ([\*|+] .+)\n\s+Test: divisible by (\d+)\n\s+If true: throw to monkey (\d+)\n\s+If false: throw to monkey (\d+)";
 
@@ -51,7 +51,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                                 break;
                         }
 
-                        // Missing divided by 3?
+                        monkey.Holding[item] = Convert.ToInt64(Math.Floor((decimal)monkey.Holding[item] / modifier));
+
                         if (monkey.Holding[item] % monkey.Test.DivisibleBy == 0)
                         {
                             monkeys[monkey.Test.True].Holding.Add(monkey.Holding[item]);
@@ -68,18 +69,69 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 rounds--;
             } while (rounds != 0);
 
-            var inspections = monkeys.Select(monkey => (monkey.Id, monkey.Inspections)).ToArray();
-
             var top = monkeys.OrderByDescending(monkey => monkey.Inspections).Take(2).ToArray();
 
             var count = top[0].Inspections * top[1].Inspections;
 
-            Assert.Pass();
+            Assert.That(count, Is.EqualTo(54054));
         }
 
         [Test]
         public void Part2()
         {
+            int rounds = 10000;
+
+            int modifier = 3;
+
+            string pattern = @"Monkey (.+):\n\s+Starting items: (.+)\n\s+Operation: new = old ([\*|+] .+)\n\s+Test: divisible by (\d+)\n\s+If true: throw to monkey (\d+)\n\s+If false: throw to monkey (\d+)";
+
+            var monkeys = _puzzle.ToEnumerable<Monkey>("\n\n", pattern, (monkey) => new(monkey)).ToArray();
+
+            do
+            {
+                for (int id = 0; id < monkeys.Length; id++)
+                {
+                    Monkey monkey = monkeys[id];
+
+                    monkey.Inspections += monkey.Holding.Count;
+
+                    for (int item = 0; item < monkey.Holding.Count; item++)
+                    {
+                        switch (monkey.Operation[1])
+                        {
+                            case "old":
+                                monkey.Holding[item] *= monkey.Holding[item];
+                                break;
+                            default:
+                                if (monkey.Operation[0] == "+")
+                                    monkey.Holding[item] += int.Parse(monkey.Operation[1]);
+                                else
+                                    monkey.Holding[item] *= int.Parse(monkey.Operation[1]);
+                                break;
+                        }
+
+                        monkey.Holding[item] = Convert.ToInt64(Math.Floor((decimal)monkey.Holding[item] / modifier));
+
+                        if (monkey.Holding[item] % monkey.Test.DivisibleBy == 0)
+                        {
+                            monkeys[monkey.Test.True].Holding.Add(monkey.Holding[item]);
+                        }
+                        else
+                        {
+                            monkeys[monkey.Test.False].Holding.Add(monkey.Holding[item]);
+                        }
+                    }
+
+                    monkey.Holding.Clear();
+                }
+
+                rounds--;
+            } while (rounds != 0);
+
+            var top = monkeys.OrderByDescending(monkey => monkey.Inspections).Take(2).ToArray();
+
+            var count = top[0].Inspections * top[1].Inspections;
+
             Assert.Pass();
         }
     }
@@ -88,9 +140,9 @@ namespace CodeAdvent.Event.Y2022.Puzzles
     {
         public int Id { get; set; }
 
-        public int Inspections { get; set; }
+        public long Inspections { get; set; }
 
-        public List<int> Holding { get; set; }
+        public List<long> Holding { get; set; }
 
         public string[] Operation { get; set; }
 
@@ -102,7 +154,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             Inspections = 0;
 
-            Holding = Array.ConvertAll(match.Groups[2].Value.Split(", "), i => int.Parse(i)).ToList();
+            Holding = Array.ConvertAll(match.Groups[2].Value.Split(", "), i => long.Parse(i)).ToList();
 
             Operation = match.Groups[3].Value.Split(" ");
 
