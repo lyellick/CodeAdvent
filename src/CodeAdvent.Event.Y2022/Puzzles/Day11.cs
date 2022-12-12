@@ -28,38 +28,32 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             do
             {
-                for (int id = 0; id < monkeys.Length; id++)
+                foreach (Monkey monkey in monkeys)
                 {
-                    Monkey monkey = monkeys[id];
-
-                    monkey.Inspections += monkey.Holding.Count;
-
                     for (int item = 0; item < monkey.Holding.Count; item++)
                     {
-                        switch (monkey.Operation[1])
+                        switch (monkey.Equation.value)
                         {
                             case "old":
                                 monkey.Holding[item] *= monkey.Holding[item];
                                 break;
                             default:
-                                if (monkey.Operation[0] == "+")
-                                    monkey.Holding[item] += int.Parse(monkey.Operation[1]);
+                                if (monkey.Equation.operation == "+")
+                                    monkey.Holding[item] += int.Parse(monkey.Equation.value);
                                 else
-                                    monkey.Holding[item] *= int.Parse(monkey.Operation[1]);
+                                    monkey.Holding[item] *= int.Parse(monkey.Equation.value);
                                 break;
                         }
 
                         monkey.Holding[item] = Convert.ToInt64(Math.Floor((decimal)monkey.Holding[item] / modifier));
 
                         if (monkey.Holding[item] % monkey.Test.DivisibleBy == 0)
-                        {
                             monkeys[monkey.Test.True].Holding.Add(monkey.Holding[item]);
-                        }
                         else
-                        {
                             monkeys[monkey.Test.False].Holding.Add(monkey.Holding[item]);
-                        }
                     }
+
+                    monkey.Inspections += monkey.Holding.Count;
 
                     monkey.Holding.Clear();
                 }
@@ -69,9 +63,9 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             var top = monkeys.OrderByDescending(monkey => monkey.Inspections).Take(2).ToArray();
 
-            var count = top[0].Inspections * top[1].Inspections;
+            var inspections = top[0].Inspections * top[1].Inspections;
 
-            Assert.That(count, Is.EqualTo(54054));
+            Assert.That(inspections, Is.EqualTo(54054));
         }
 
         [Test]
@@ -85,24 +79,20 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             do
             {
-                for (int id = 0; id < monkeys.Length; id++)
+                foreach (Monkey monkey in monkeys)
                 {
-                    Monkey monkey = monkeys[id];
-
-                    monkey.Inspections += monkey.Holding.Count;
-
                     for (int item = 0; item < monkey.Holding.Count; item++)
                     {
-                        switch (monkey.Operation[1])
+                        switch (monkey.Equation.value)
                         {
                             case "old":
                                 monkey.Holding[item] *= monkey.Holding[item];
                                 break;
                             default:
-                                if (monkey.Operation[0] == "+")
-                                    monkey.Holding[item] += int.Parse(monkey.Operation[1]);
+                                if (monkey.Equation.operation == "+")
+                                    monkey.Holding[item] += int.Parse(monkey.Equation.value);
                                 else
-                                    monkey.Holding[item] *= int.Parse(monkey.Operation[1]);
+                                    monkey.Holding[item] *= int.Parse(monkey.Equation.value);
                                 break;
                         }
 
@@ -112,14 +102,12 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                             monkey.Holding[item] %= limit;
 
                         if (monkey.Holding[item] % monkey.Test.DivisibleBy == 0)
-                        {
                             monkeys[monkey.Test.True].Holding.Add(monkey.Holding[item]);
-                        }
                         else
-                        {
                             monkeys[monkey.Test.False].Holding.Add(monkey.Holding[item]);
-                        }
                     }
+
+                    monkey.Inspections += monkey.Holding.Count;
 
                     monkey.Holding.Clear();
                 }
@@ -129,35 +117,29 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             var top = monkeys.OrderByDescending(monkey => monkey.Inspections).Take(2).ToArray();
 
-            var count = top[0].Inspections * top[1].Inspections;
+            var inspections = top[0].Inspections * top[1].Inspections;
 
-            Assert.That(count, Is.EqualTo(14314925001));
+            Assert.That(inspections, Is.EqualTo(14314925001));
         }
     }
 
     public class Monkey
     {
-        public int Id { get; set; }
-
-        public long Inspections { get; set; }
-
-        public int Limit { get; set; }
+        public long Inspections { get; set; } = 0;
 
         public List<long> Holding { get; set; }
 
-        public string[] Operation { get; set; }
+        public (string operation, string value) Equation { get; set; }
 
         public MonkeyTest Test { get; set; }
 
         public Monkey(Match match)
         {
-            Id = int.Parse(match.Groups[1].Value);
-
-            Inspections = 0;
+            string[] parts = match.Groups[3].Value.Split(" ");
 
             Holding = Array.ConvertAll(match.Groups[2].Value.Split(", "), i => long.Parse(i)).ToList();
 
-            Operation = match.Groups[3].Value.Split(" ");
+            Equation = (parts[0], parts[1]);
 
             Test = new MonkeyTest(match);
         }
