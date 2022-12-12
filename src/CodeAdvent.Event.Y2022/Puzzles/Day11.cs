@@ -20,13 +20,11 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
-            int rounds = 20;
-
-            int modifier = 3;
-
             string pattern = @"Monkey (.+):\n\s+Starting items: (.+)\n\s+Operation: new = old ([\*|+] .+)\n\s+Test: divisible by (\d+)\n\s+If true: throw to monkey (\d+)\n\s+If false: throw to monkey (\d+)";
 
             var monkeys = _puzzle.ToEnumerable<Monkey>("\n\n", pattern, (monkey) => new(monkey)).ToArray();
+
+            int rounds = 20, modifier = 3;
 
             do
             {
@@ -79,13 +77,11 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            int rounds = 10000;
-
-            int modifier = 3;
-
             string pattern = @"Monkey (.+):\n\s+Starting items: (.+)\n\s+Operation: new = old ([\*|+] .+)\n\s+Test: divisible by (\d+)\n\s+If true: throw to monkey (\d+)\n\s+If false: throw to monkey (\d+)";
 
             var monkeys = _puzzle.ToEnumerable<Monkey>("\n\n", pattern, (monkey) => new(monkey)).ToArray();
+
+            int rounds = 10000, modifier = 1, limit = monkeys.Aggregate(1, (iteration, monkey) => iteration * monkey.Test.DivisibleBy);
 
             do
             {
@@ -112,6 +108,9 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
                         monkey.Holding[item] = Convert.ToInt64(Math.Floor((decimal)monkey.Holding[item] / modifier));
 
+                        if (monkey.Holding[item] >= limit)
+                            monkey.Holding[item] %= limit;
+
                         if (monkey.Holding[item] % monkey.Test.DivisibleBy == 0)
                         {
                             monkeys[monkey.Test.True].Holding.Add(monkey.Holding[item]);
@@ -132,7 +131,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             var count = top[0].Inspections * top[1].Inspections;
 
-            Assert.Pass();
+            Assert.That(count, Is.EqualTo(14314925001));
         }
     }
 
@@ -141,6 +140,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         public int Id { get; set; }
 
         public long Inspections { get; set; }
+
+        public int Limit { get; set; }
 
         public List<long> Holding { get; set; }
 
