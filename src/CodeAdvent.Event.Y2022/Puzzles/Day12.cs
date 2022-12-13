@@ -22,25 +22,23 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             int steps = 0;
 
-            (int row, int col) current = (20, 0), end = (20, 88);
+            (int row, int col) start = (20, 0), end = (20, 88);
 
-            var map = _puzzle.ToEnumerable((line) => line.Select(c => c - 97).ToArray()).ToArray();
+            var map = _puzzle
+                .ToEnumerable((line) => line.Select(c => c - 97))
+                .Select((cols, row) => cols.Select((elevation, col) => new Cell(row, col, elevation, end)).ToArray())
+                .ToArray();
+
+            Cell current = map[start.row][start.col], finish = map[end.row][end.col];
+
+            List<Cell> path = new() { current }, queue = new();
 
             do
             {
-                var neighbors = map.GetNeighbors(current.row, current.col);
+                var neighbors = current.GetNeighbors(map);
 
-                foreach (var neighbor in neighbors)
-                {
-                    var prev = map[current.row][current.col];
-                    var next = map[neighbor.row][neighbor.col];
 
-                    if (neighbor != current && (next == prev + 1 || prev == next))
-                        // Split off to branching paths?
-                        current = neighbor; steps++;
-                }
-
-            } while (current != end);
+            } while (current != finish);
 
             Assert.Pass();
         }
@@ -50,7 +48,42 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             Assert.Pass();
         }
+    }
 
-        private double GetDistance((int row, int col) start, (int row, int col) end) => Math.Sqrt(Math.Pow((end.col - start.col), 2) + Math.Pow((end.row - start.row), 2));
+    public class Cell
+    {
+        public int Row { get; set; }
+
+        public int Col { get; set; }
+
+        public int Elevation { get; set; }
+
+        public double Distance { get; set; }
+
+        public Cell(int row, int col, int elevation, (int row, int col) end)
+        {
+            Row = row;
+            Col = col;
+            Elevation = elevation;
+            Distance = Math.Sqrt(Math.Pow((end.col - col), 2) + Math.Pow((end.row - row), 2));
+        }
+
+        public Cell[] GetNeighbors(Cell[][] map)
+        {
+            Cell[] neighbors = Array.Empty<Cell>();
+
+            if (map.IsWithinBounds(Row, Col))
+            {
+                List<(int row, int col)> prospects = new() { (Row + 1, Col), (Row, Col + 1), (Row - 1, Col), (Row, Col - 1) };
+
+                neighbors = prospects
+                    .Where(prospective => map.IsWithinBounds(prospective.row, prospective.col))
+                    .Select(prospect => map[prospect.row][prospect.col])
+                    .OrderBy(prospect => prospect.Distance).ThenBy(prospect => prospect.Elevation)
+                    .ToArray();
+            }
+
+            return neighbors;
+        }
     }
 }
