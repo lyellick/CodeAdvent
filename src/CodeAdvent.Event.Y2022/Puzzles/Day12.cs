@@ -26,7 +26,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             var map = _puzzle
                 .ToEnumerable((line) => line.Select(c => c - 97))
-                .Select((cols, row) => cols.Select((elevation, col) => new Cell(row, col, elevation, end)).ToArray())
+                .Select((cols, row) => cols
+                    .Select((elevation, col) => new Cell(row, col, elevation, end)).ToArray())
                 .ToArray();
 
             Cell start = map[begining.row][begining.col], finish = map[end.row][end.col];
@@ -43,7 +44,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
                 var neighbors = current.GetNeighbors(map);
 
-                var available = neighbors.Where(cell => cell.Parent == null).Where(cell => cell.Elevation <= current.Elevation + 1).ToArray();
+                var available = neighbors
+                    .Where(cell => cell.Parent == null)
+                    .Where(cell => cell.Elevation <= current.Elevation + 1)
+                    .ToArray();
 
                 if (current.Id == finish.Id)
                     steps = current.Parent.Value;
@@ -55,13 +59,50 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 }
             } while (steps == 0);
 
-            Assert.Pass();
+            Assert.That(steps, Is.EqualTo(380));
         }
 
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            (int row, int col) begining = (20, 88);
+
+            var map = _puzzle
+                .ToEnumerable((line) => line.Select(c => c - 97))
+                .Select((cols, row) => cols
+                    .Select((elevation, col) => new Cell(row, col, elevation)).ToArray())
+                .ToArray();
+
+            Cell start = map[begining.row][begining.col];
+
+            start.Parent = 0;
+
+            Queue<Cell> queue = new(new[] { start });
+
+            int steps = 0;
+
+            do
+            {
+                var current = queue.Dequeue();
+
+                var neighbors = current.GetNeighbors(map);
+
+                var available = neighbors
+                    .Where(cell => cell.Parent == null)
+                    .Where(cell => cell.Elevation >= current.Elevation - 1)
+                    .ToArray();
+
+                if (current.Elevation == 0)
+                    steps = current.Parent.Value;
+
+                foreach (var cell in available)
+                {
+                    cell.Parent = current.Parent + 1;
+                    queue.Enqueue(cell);
+                }
+            } while (steps == 0);
+
+            Assert.That(steps, Is.EqualTo(375));
         }
     }
 
@@ -79,14 +120,15 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
         public double Distance { get; set; }
 
-        public Cell(int row, int col, int elevation, (int row, int col) end, int? seen = null)
+        public Cell(int row, int col, int elevation, (int row, int col)? end = null, int? seen = null)
         {
             Id = Guid.NewGuid();
             Parent = seen;
             Row = row;
             Col = col;
             Elevation = elevation;
-            Distance = Math.Sqrt(Math.Pow((end.col - col), 2) + Math.Pow((end.row - row), 2));
+            if (end != null)
+                Distance = Math.Sqrt(Math.Pow((end.Value.col - col), 2) + Math.Pow((end.Value.row - row), 2));
         }
 
         public Cell[] GetNeighbors(Cell[][] map)
