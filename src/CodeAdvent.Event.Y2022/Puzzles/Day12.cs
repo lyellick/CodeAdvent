@@ -22,23 +22,23 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             int steps = 0;
 
-            (int row, int col) start = (20, 0), end = (20, 88);
+            (int row, int col) s = (20, 0), e = (20, 88);
 
             var map = _puzzle
                 .ToEnumerable((line) => line.Select(c => c - 97))
-                .Select((cols, row) => cols.Select((elevation, col) => new Cell(row, col, elevation, end)).ToArray())
+                .Select((cols, row) => cols.Select((elevation, col) => new Cell(row, col, elevation, e)).ToArray())
                 .ToArray();
 
-            Cell current = map[start.row][start.col], finish = map[end.row][end.col];
+            Cell start = map[s.row][s.col], finish = map[e.row][e.col], current = start;
 
-            List<Cell> path = new() { current }, queue = new();
+            List<Cell> path = new() { start }, queue = new();
 
             do
             {
                 var neighbors = current.GetNeighbors(map);
 
-
-            } while (current != finish);
+                path.Add(neighbors.First());
+            } while (start != finish);
 
             Assert.Pass();
         }
@@ -72,16 +72,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             Cell[] neighbors = Array.Empty<Cell>();
 
-            if (map.IsWithinBounds(Row, Col))
-            {
-                List<(int row, int col)> prospects = new() { (Row + 1, Col), (Row, Col + 1), (Row - 1, Col), (Row, Col - 1) };
+            List<(int row, int col)> locations = new() { (Row + 1, Col), (Row, Col + 1), (Row - 1, Col), (Row, Col - 1) };
 
-                neighbors = prospects
-                    .Where(prospective => map.IsWithinBounds(prospective.row, prospective.col))
-                    .Select(prospect => map[prospect.row][prospect.col])
-                    .OrderBy(prospect => prospect.Distance).ThenBy(prospect => prospect.Elevation)
-                    .ToArray();
-            }
+            neighbors = locations
+                .Where(location => map.IsWithinBounds(location.row, location.col))
+                .Select(location => map[location.row][location.col])
+                .OrderBy(cell => cell.Distance).ThenBy(cell => cell.Elevation)
+                .ToArray();
 
             return neighbors;
         }
