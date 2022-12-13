@@ -135,7 +135,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {
             Cell[] neighbors = Array.Empty<Cell>();
 
-            List<(int row, int col)> locations = new() { (Row + 1, Col), (Row, Col + 1), (Row - 1, Col), (Row, Col - 1) };
+            List<(int row, int col)> locations = new()
+            { 
+                (Row + 1, Col), 
+                (Row, Col + 1), 
+                (Row - 1, Col), 
+                (Row, Col - 1)
+            };
 
             neighbors = locations
                 .Where(location => map.IsWithinBounds(location.row, location.col))
