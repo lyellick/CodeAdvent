@@ -1,4 +1,5 @@
 ﻿using CodeAdvent.Common.Models;
+using Microsoft.VisualBasic;
 using System.Text.RegularExpressions;
 
 namespace CodeAdvent.Common.Extensions
@@ -19,6 +20,15 @@ namespace CodeAdvent.Common.Extensions
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                 yield return action(line);
+
+        }
+
+        public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string split, Func<string, T> action)
+        {
+            var groups = codeAdventEvent.Input.Split(split);
+
+            foreach (var group in groups)
+                yield return action(group);
 
         }
 
