@@ -120,10 +120,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
         public double Distance { get; set; }
 
-        public Cell(int row, int col, int elevation, (int row, int col)? end = null, int? seen = null)
+        public Cell(int row, int col, int elevation, (int row, int col)? end = null, int? parent = null)
         {
             Id = Guid.NewGuid();
-            Parent = seen;
+            Parent = parent;
             Row = row;
             Col = col;
             Elevation = elevation;
