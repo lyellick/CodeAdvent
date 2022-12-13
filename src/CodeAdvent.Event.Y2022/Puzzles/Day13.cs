@@ -1,3 +1,6 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -13,11 +16,18 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             _puzzle = await CodeAdventData.GetPuzzle(2022, 13);
 
             Assert.That(_puzzle.Input, Is.Not.Null.Or.Empty);
-        }
+        }   
 
         [Test]
         public void Part1()
-        {
+        {   
+            var pairs = _puzzle.ToEnumerable<(JArray left, JArray right)>("\n\n", "\n", (pair) => (JArray.Parse(pair[0]), JArray.Parse(pair[1]))).ToArray();
+
+            foreach (var pair in pairs)
+            {
+                
+            }
+
             Assert.Pass();
         }
 
