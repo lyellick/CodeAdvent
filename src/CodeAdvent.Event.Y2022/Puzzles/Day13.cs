@@ -34,6 +34,15 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
+            var dividers = new[] { "[[2]]", "[[8]]" };
+
+            var packets = _puzzle
+                .ToEnumerable("\n\n", "\n", (pair) => new JArray[] { JArray.Parse(pair[0]), JArray.Parse(pair[1]) })
+                .SelectMany(pair => pair)
+                .ToList();
+
+            packets.AddRange(dividers.Select(packet => JArray.Parse(packet)));
+
             Assert.Pass();
         }
     }
