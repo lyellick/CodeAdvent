@@ -31,7 +31,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     .ToArray())
                 .ToArray();
 
-            Simultion simultion = new(layout, (0, 500), 158, 506);
+            Simultion simultion = new(layout, (0, 500), (158, 506));
 
             string cave = simultion.ToString();
 
@@ -51,11 +51,11 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
         private (int row, int col) _start;
 
-        public Simultion((int row, int col)[][] layout, (int row, int col) start, int width, int length)
+        public Simultion((int row, int col)[][] layout, (int row, int col) start, (int width, int length) boundry)
         {
             _start = start;
 
-            _cave = JaggedArrayUtility.Create<int[][]>(width + 1, length * 2);
+            _cave = JaggedArrayUtility.Create<int[][]>(boundry.width + 1, boundry.length * 2);
 
             foreach (var coordinates in layout)
                 for (int coordinate = 0; coordinate < coordinates.Length - 1; coordinate++)
