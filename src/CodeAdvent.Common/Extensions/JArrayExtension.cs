@@ -4,40 +4,43 @@ namespace CodeAdvent.Common.Extensions
 {
     public static class JArrayExtension
     {
-        public static bool? CompareTo(this JArray compare, JArray to)
+        public static bool? CompareTo(this JArray from, JArray to)
         {
-            for (int i = 0; i < compare.Count; i++)
+            for (int i = 0; i < from.Count; i++)
             {
                 if (to.Count <= i)
                     return false;
 
-                var left = compare[i];
-                var right = to[i];
+                JToken left = from[i], right = to[i];
 
-                if (left.Type == JTokenType.Integer && right.Type == JTokenType.Integer)
+                switch (left.Type)
                 {
-                    int li = left.ToObject<int>(), ri = right.ToObject<int>();
+                    case JTokenType.Integer when right.Type == JTokenType.Integer:
+                        int li = left.ToObject<int>(), ri = right.ToObject<int>();
 
-                    if (li < ri)
-                        return true;
-                    else if (ri > li) 
-                        return false;
+                        if (li < ri)
+                            return true;
 
-                    continue;
+                        if (ri < li)
+                            return false;
+
+                        continue;
+                    case JTokenType.Integer:
+                        left = new JArray(left);
+                        break;
+                    default:
+                        if (right.Type == JTokenType.Integer)
+                            right = new JArray(right);
+                        break;
                 }
-
-                if (left.Type  == JTokenType.Integer)
-                    left = new JArray(left);
-                else if (right.Type == JTokenType.Integer)
-                    right = new JArray(right);
 
                 var result = (left as JArray).CompareTo(right as JArray);
 
                 if (result != null)
-                    return null;
+                    return result;
             }
 
-            if (to.Count == compare.Count)
+            if (to.Count == from.Count)
                 return null;
 
             return true;

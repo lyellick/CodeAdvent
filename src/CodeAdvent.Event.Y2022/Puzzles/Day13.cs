@@ -1,6 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -21,14 +18,17 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {   
-            var pairs = _puzzle.ToEnumerable<(JArray left, JArray right)>("\n\n", "\n", (pair) => (JArray.Parse(pair[0]), JArray.Parse(pair[1]))).ToArray();
+            var pairs = _puzzle
+                .ToEnumerable<(JArray left, JArray right)>("\n\n", "\n", (pair) => (JArray.Parse(pair[0]), JArray.Parse(pair[1])))
+                .ToArray();
+
+            var range = Enumerable.Range(1, pairs.Length);
 
             var valid = pairs.Select(pair => pair.left.CompareTo(pair.right)).ToArray();
 
-            var sum = valid.Zip(Enumerable.Range(1, pairs.Length), (first, second) => first == true ? second : 0).Sum();
+            var result = valid.Zip(range, (prev, next) => prev == true ? next : 0);
 
-
-            Assert.Pass();
+            Assert.That(result.Sum(), Is.EqualTo(5623));
         }
 
         [Test]

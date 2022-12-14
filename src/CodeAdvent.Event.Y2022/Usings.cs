@@ -1,4 +1,6 @@
 global using NUnit.Framework;
+global using Newtonsoft.Json.Linq;
+
 global using CodeAdvent.Common;
 global using CodeAdvent.Common.Models;
 global using CodeAdvent.Common.Utilities;
