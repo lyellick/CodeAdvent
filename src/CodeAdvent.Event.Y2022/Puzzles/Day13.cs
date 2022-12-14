@@ -23,10 +23,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         {   
             var pairs = _puzzle.ToEnumerable<(JArray left, JArray right)>("\n\n", "\n", (pair) => (JArray.Parse(pair[0]), JArray.Parse(pair[1]))).ToArray();
 
-            foreach (var pair in pairs)
-            {
-                
-            }
+            var valid = pairs.Select(pair => pair.left.CompareTo(pair.right)).ToArray();
+
+            var sum = valid.Zip(Enumerable.Range(1, pairs.Length), (first, second) => first == true ? second : 0).Sum();
+
 
             Assert.Pass();
         }
