@@ -31,7 +31,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                     .ToArray())
                 .ToArray();
 
-            Simultion simultion = new(layout, (0, 500), (158, 506));
+            var simultion = new CaveSimultion(layout, (0, 500), (158, 506));
 
             string cave = simultion.ToString();
 
@@ -45,13 +45,13 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         }
     }
 
-    public class Simultion
+    public class CaveSimultion
     {
         private int[][] _cave;
 
         private (int row, int col) _start;
 
-        public Simultion((int row, int col)[][] layout, (int row, int col) start, (int width, int length) boundry)
+        public CaveSimultion((int row, int col)[][] layout, (int row, int col) start, (int width, int length) boundry)
         {
             _start = start;
 
