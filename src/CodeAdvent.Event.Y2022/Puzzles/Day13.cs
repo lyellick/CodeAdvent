@@ -1,3 +1,5 @@
+using System.Net.Sockets;
+
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -34,16 +36,20 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            var dividers = new[] { "[[2]]", "[[8]]" };
-
             var packets = _puzzle
                 .ToEnumerable("\n\n", "\n", (pair) => new JArray[] { JArray.Parse(pair[0]), JArray.Parse(pair[1]) })
                 .SelectMany(pair => pair)
                 .ToList();
 
-            packets.AddRange(dividers.Select(packet => JArray.Parse(packet)));
+            packets.AddRange(new[] { "[[2]]", "[[6]]" }.Select(packet => JArray.Parse(packet)));
 
-            Assert.Pass();
+            var end = packets.Skip(packets.Count - 2).ToArray();
+
+            var stream = packets.OrderByDescending(packet => new Comparable(packet)).ToArray();
+
+            var key = (Array.IndexOf(stream, end[0]) + 1) * (Array.IndexOf(stream, end[1]) + 1);
+
+            Assert.That(key, Is.EqualTo(20570));
         }
     }
 }
