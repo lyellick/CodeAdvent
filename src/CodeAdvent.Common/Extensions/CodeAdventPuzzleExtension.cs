@@ -25,7 +25,7 @@ namespace CodeAdvent.Common.Extensions
 
         public static IEnumerable<T> ToEnumerable<T>(this CodeAdventPuzzle codeAdventEvent, string splitBy, string thenSplitBy, Func<string[], T> action)
         {
-            var groups = codeAdventEvent.Input.Split(splitBy);
+            var groups = codeAdventEvent.Input.Trim().Split(splitBy);
 
             foreach (var group in groups)
                 yield return action(group.Split(thenSplitBy));
