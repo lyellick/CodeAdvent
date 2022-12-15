@@ -44,7 +44,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             string cave = simultion.ToString();
 
-            Assert.That(simultion.AddSandGrain, Is.EqualTo(578));
+            Assert.That(simultion.SandGrainCount, Is.EqualTo(578));
         }
 
         [Test]
