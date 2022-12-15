@@ -1,5 +1,6 @@
 ﻿using CodeAdvent.Common.Extensions;
 using CodeAdvent.Common.Models;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using System.Drawing;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
@@ -35,12 +36,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             var simultion = new CaveSimultion(layout, (0, 500), (158, 506));
 
-            bool drop = true;
-
-            do
-            {
-                drop = simultion.AddSandGrain();
-            } while (drop);
+            simultion.Run();
 
             string cave = simultion.ToString();
 
@@ -50,7 +46,22 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            Assert.Pass();
+            //_puzzle.Input = "498,4 -> 498,6 -> 496,6\n503,4 -> 502,4 -> 502,9 -> 494,9";
+
+            var layout = _puzzle
+                .ToEnumerable<(int row, int col)[]>("\n", " -> ", (row) => row
+                    .Select(coord => coord.Split(","))
+                    .Select(coord => (int.Parse(coord[0]), int.Parse(coord[1])))
+                    .ToArray())
+                .ToArray();
+
+            var simultion = new CaveSimultion(layout, (0, 500), (158, 506), true);
+
+            simultion.Run();
+
+            string cave = simultion.ToString();
+
+            Assert.That(simultion.SandGrainCount, Is.EqualTo(24377));
         }
     }
 
@@ -62,21 +73,46 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
         private (int row, int col) _start;
 
-        public CaveSimultion((int row, int col)[][] layout, (int row, int col) start, (int width, int length) boundry)
+        private readonly bool _floor;
+
+        public CaveSimultion((int row, int col)[][] layout, (int row, int col) start, (int width, int length) boundry, bool floor = false)
         {
+            _floor = floor;
+
             _start = start;
 
-            _cave = JaggedArrayUtility.Create<int[][]>(boundry.width + 1, boundry.length * 2);
+            if (!_floor)
+                _cave = JaggedArrayUtility.Create<int[][]>(boundry.width + 1, boundry.length * 2);
+            else
+                _cave = JaggedArrayUtility.Create<int[][]>(boundry.width + 10, boundry.length * 2);
 
             foreach (var coordinates in layout)
                 for (int coordinate = 0; coordinate < coordinates.Length - 1; coordinate++)
                     foreach (var (row, col) in coordinates[coordinate].CreateLine(coordinates[coordinate + 1]))
                         _cave[row][col] = 1;
 
+            if (_floor)
+            {
+                var row = layout.Max(line => line.Max(x => x.col)) + 2;
+
+                for (int col = 0; col < _cave[row].Length; col++)
+                    _cave[row][col] = 1;
+            }
+
             _cave[start.row][start.col] = 3;
         }
 
-        public bool AddSandGrain()
+        public void Run()
+        {
+            bool drop = true;
+
+            do
+            {
+                drop = AddSandGrain();
+            } while (drop);
+        }
+
+        private bool AddSandGrain()
         {
             Grain start = new(_start.row, _start.col);
 
@@ -91,6 +127,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 return true;
             }
 
+            if (resting == null && _floor)
+                SandGrainCount++;
 
             return false;
         }
@@ -100,9 +138,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             Grain next = null;
 
             if (!_cave.IsWithinBounds(current.Row, current.Col))
-            {
                 return null;
-            }
 
             var value = _cave.GetValue(current);
 
@@ -140,7 +176,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             }
             else if (left == null && right == null)
             {
-                next = new(current.Row - 1, current.Col);
+                if (current.Row != 1)
+                    next = new(current.Row - 1, current.Col);
+                else
+                    return null;
             }
             else
             {
