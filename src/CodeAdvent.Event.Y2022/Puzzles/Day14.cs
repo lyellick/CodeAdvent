@@ -46,8 +46,6 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part2()
         {
-            //_puzzle.Input = "498,4 -> 498,6 -> 496,6\n503,4 -> 502,4 -> 502,9 -> 494,9";
-
             var layout = _puzzle
                 .ToEnumerable<(int row, int col)[]>("\n", " -> ", (row) => row
                     .Select(coord => coord.Split(","))
