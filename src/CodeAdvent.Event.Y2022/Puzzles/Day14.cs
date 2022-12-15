@@ -39,12 +39,12 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             do
             {
-                simultion.ProcessGrain();
-
-                string cave = simultion.ToString();
+                drop = simultion.AddSandGrain();
             } while (drop);
 
-            Assert.Pass();
+            string cave = simultion.ToString();
+
+            Assert.That(simultion.AddSandGrain, Is.EqualTo(578));
         }
 
         [Test]
@@ -56,6 +56,8 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
     public class CaveSimultion
     {
+        public long SandGrainCount { get; set; } = 0;
+
         private int[][] _cave;
 
         private (int row, int col) _start;
@@ -74,10 +76,102 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             _cave[start.row][start.col] = 3;
         }
 
-        public void ProcessGrain()
+        public bool AddSandGrain()
         {
-            Grain grain = new(_start);
+            Grain start = new(_start.row, _start.col);
 
+            var resting = GetRestingLocation(start);
+
+            if (resting != null)
+            {
+                _cave[resting.Row][resting.Col] = 2;
+
+                SandGrainCount++;
+
+                return true;
+            }
+
+
+            return false;
+        }
+
+        private Grain GetRestingLocation(Grain current)
+        {
+            Grain next = null;
+
+            if (!_cave.IsWithinBounds(current.Row, current.Col))
+            {
+                return null;
+            }
+
+            var value = _cave.GetValue(current);
+
+            switch (value)
+            {
+                case 0:
+                case 3:
+                    next = GetRestingLocation(new(current.Row + 1, current.Col));
+                    break;
+                case 1:
+                    if (_cave[current.Row][current.Col - 1] != 1 || _cave[current.Row][current.Col + 1] != 1)
+                        next = GetDirection(current, next);
+                    else
+                        next = new(current.Row - 1, current.Col);
+                    break;
+                case 2:
+                    next = GetDirection(current, next);
+                    break;
+            }
+
+            return next;
+        }
+
+        private Grain GetDirection(Grain current, Grain next)
+        {
+            var left = GoLeft(current);
+            var right = GoRight(current);
+            if (left != null)
+            {
+                next = GetRestingLocation(left);
+            }
+            else if (right != null)
+            {
+                next = GetRestingLocation(right);
+            }
+            else if (left == null && right == null)
+            {
+                next = new(current.Row - 1, current.Col);
+            }
+            else
+            {
+                // Edge Case
+            }
+
+            return next;
+        }
+
+        private Grain GoLeft(Grain current)
+        {
+            Grain next = new(current.Row, current.Col - 1);
+
+            var value = _cave[next.Row][next.Col];
+
+            if (value == 0)
+                return next;
+
+            return null;
+        }
+
+        private Grain GoRight(Grain current)
+        {
+            Grain next = new(current.Row, current.Col + 1);
+
+            var value = _cave[next.Row][next.Col];
+
+            if (value == 0)
+                return next;
+
+            return null;
         }
 
         public override string ToString()
@@ -112,13 +206,10 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
         public int Col { get; set; }
 
-        public virtual Grain Previous { get; set; }
-
-        public Grain((int row, int col) start, Grain previous = null)
+        public Grain(int row, int col)
         {
-            Row = start.row;
-            Col = start.col;
-            Previous = previous;
+            Row = row;
+            Col = col;
         }
     }
 
