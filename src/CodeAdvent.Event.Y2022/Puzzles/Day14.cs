@@ -138,7 +138,7 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             if (!_cave.IsWithinBounds(current.Row, current.Col))
                 return null;
 
-            var value = _cave.GetValue(current);
+            var value = _cave[current.Row][current.Col];
 
             switch (value)
             {
@@ -248,10 +248,5 @@ namespace CodeAdvent.Event.Y2022.Puzzles
             Row = row;
             Col = col;
         }
-    }
-
-    public static class CaveExtension
-    {
-        public static int GetValue(this int[][] cave, Grain sand) => cave[sand.Row][sand.Col];
     }
 }
