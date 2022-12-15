@@ -1,13 +1,4 @@
-﻿using CodeAdvent.Common.Extensions;
-using CodeAdvent.Common.Models;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
-using System.Drawing;
-using System.Reflection.PortableExecutable;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-
-namespace CodeAdvent.Event.Y2022.Puzzles
+﻿namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
     /// Day 14: Regolith Reservoir
