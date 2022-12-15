@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace CodeAdvent.Event.Y2022.Puzzles
 {
     /// <summary>
@@ -18,6 +20,14 @@ namespace CodeAdvent.Event.Y2022.Puzzles
         [Test]
         public void Part1()
         {
+            string pattern = @"Sensor at x=(.+), y=(.+): closest beacon is at x=(.+), y=(.+)";
+
+            var scan = _puzzle.ToEnumerable<((int row, int col) sensor, (int row, int col) beacon)>(pattern, (line) => 
+            {
+                var groups = line.Groups.ToEnumerable<int>().ToArray();
+                return ((groups[1], groups[0]), (groups[3], groups[2]));
+            }).ToArray();
+
             Assert.Pass();
         }
 
