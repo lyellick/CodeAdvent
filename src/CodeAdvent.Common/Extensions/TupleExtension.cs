@@ -29,6 +29,8 @@
         
         public static long ManhattanDistanceTo(this (int row, int col) from, (int row, int col) to) => Math.Abs(from.col - to.col) + Math.Abs(from.row - to.row);
 
+        public static long ManhattanDistanceTo(this (long row, long col) from, (long row, long col) to) => Math.Abs(from.col - to.col) + Math.Abs(from.row - to.row);
+
         public static double EdgeAdjacentDistanceTo(this (int row, int col) from, (int row, int col) to) => Math.Sqrt(Math.Pow((to.col - from.col), 2) + Math.Pow((to.row - from.row), 2));
     }
 }
