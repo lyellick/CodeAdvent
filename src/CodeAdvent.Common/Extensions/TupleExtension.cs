@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Drawing;
-
-namespace CodeAdvent.Common.Extensions
+﻿namespace CodeAdvent.Common.Extensions
 {
     public static class TupleExtension
     {
@@ -18,7 +15,6 @@ namespace CodeAdvent.Common.Extensions
                     points.AddRange(Enumerable.Range(from.row, to.row - from.row + 1).Select(y => (from.col, y)));
             }
 
-            // move left or right
             if (from.row == to.row)
             {
                 if (from.col > to.col)
@@ -30,5 +26,9 @@ namespace CodeAdvent.Common.Extensions
 
             return points;
         }
+        
+        public static long ManhattanDistanceTo(this (int row, int col) from, (int row, int col) to) => Math.Abs(from.col - to.col) + Math.Abs(from.row - to.row);
+
+        public static double EdgeAdjacentDistanceTo(this (int row, int col) from, (int row, int col) to) => Math.Sqrt(Math.Pow((to.col - from.col), 2) + Math.Pow((to.row - from.row), 2));
     }
 }
