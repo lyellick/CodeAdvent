@@ -61,9 +61,9 @@ namespace CodeAdvent.Event.Y2022.Puzzles
 
             var upperbound = 4000000;
 
-            List<((long row, long col) sensor, (long row, long col) beacon, long weight)> evaluations = new();
-
             string pattern = @"Sensor at x=(.+), y=(.+): closest beacon is at x=(.+), y=(.+)";
+
+            List<((long row, long col) sensor, (long row, long col) beacon, long weight)> evaluations = new();
 
             var scan = _puzzle.ToEnumerable<((long row, long col) sensor, (long row, long col) beacon)>(pattern, (line) =>
             {
@@ -72,31 +72,27 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 return ((groups[1], groups[0]), (groups[3], groups[2]));
             }).ToArray();
 
-            for (long i = 0; i < scan.Length; i++)
-            {
-                (long row, long col) sensor = scan[i].sensor, beacon = scan[i].beacon;
-
+            foreach (var (sensor, beacon) in scan)
                 evaluations.Add((sensor, beacon, sensor.ManhattanDistanceTo(beacon)));
-            }
 
             evaluations = evaluations.OrderBy(evaluation => evaluation.weight).ToList();
 
-            for (long evaluation = 0; evaluation < evaluations.Count; evaluation++)
+            for (int evaluation = 0; evaluation < evaluations.Count; evaluation++)
             {
-                (long row, long col) sensor = evaluations[Convert.ToInt32(evaluation)].sensor, beacon = evaluations[Convert.ToInt32(evaluation)].beacon;
+                (long row, long col) sensor = evaluations[evaluation].sensor, beacon = evaluations[evaluation].beacon;
 
-                var weight = evaluations[Convert.ToInt32(evaluation)].weight;
+                var weight = evaluations[evaluation].weight;
 
-                var expanse = Enumerable.Range(0, Convert.ToInt32(weight) + 1)
+                var expanse = Enumerable.Range(0, (int)weight + 1)
                     .SelectMany(modifier => GetPerimeter(sensor, weight, modifier))
-                    .Where(evaluation => evaluation.col >= 0 && evaluation.col <= upperbound && evaluation.row >= 0 && evaluation.row <= upperbound)
+                    .Where(evaluation => IsWithinBounds(evaluation, upperbound))
                     .ToArray();
 
                 for (int entry = 0; entry < scan.Length; entry++)
                 {
                     if (entry == evaluation)
                         continue;
-                        
+
                     if (!expanse.Any())
                         break;
 
@@ -112,15 +108,18 @@ namespace CodeAdvent.Event.Y2022.Puzzles
                 }
             }
 
-            Assert.Pass();
+            Assert.That(output, Is.EqualTo(12413999391794));
         }
+
+        private static bool IsWithinBounds((long row, long col) evaluation, int upperbound) => 
+            evaluation.col >= 0 && evaluation.col <= upperbound && evaluation.row >= 0 && evaluation.row <= upperbound;
 
         private (long row, long col)[] GetPerimeter((long row, long col) sensor, long weight, long modifier)
         {
             return new (long row, long col)[]
             {
-                (sensor.row - weight - 1 + 1, sensor.col + modifier),
-                (sensor.row - weight + 1 + modifier, sensor.col - weight + modifier),
+                (sensor.row - weight - 1 + modifier, sensor.col + modifier),
+                (sensor.row + 1 + modifier, sensor.col - weight + modifier),
                 (sensor.row - modifier, sensor.col - weight - 1 + modifier),
                 (sensor.row + weight - modifier, sensor.col + 1 + modifier)
             };
